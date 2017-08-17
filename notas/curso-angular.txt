@@ -1,0 +1,14 @@
+Angular
+  Framework para crear SPA (single page applications)
+  SPA: 
+  	- un unico HTML, cambiamos su estado con nuestras operaciones. 
+  	- si necesitamos cargar datos, lo hacemos lanzando en background y nuestros componentes van recargando los cambios segun se van resolviendo las peticiones.
+
+Instalacion del cliente:
+	sudo npm install -g @angular/cli
+	
+Creacion de un proyecto:
+	ng new my-first-app
+	
+Ejecutar en servidor
+	ng serve
