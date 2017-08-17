@@ -1,26 +1,35 @@
 Angular
   Framework para crear SPA (single page applications)
-  SPA: 
-  	- un unico HTML, cambiamos su estado con nuestras operaciones. 
+
+  Angular es un JS Framework que cambia el DOM(HTML) en runtime
+
+  SPA:
+  	- un unico HTML, cambiamos su estado con nuestras operaciones.
   	- si necesitamos cargar datos, lo hacemos lanzando en background y nuestros componentes van recargando los cambios segun se van resolviendo las peticiones.
+
+Instalar la ultima version de Node JS (en el momento del curso, NPM es el gestor de paquetes Node Package Manager)
+	node --version
+		v8.4.0
+
+	npm -version
+		5.3.0
 
 Instalacion del cliente de angular:
 	sudo npm install -g @angular/cli
-	
+
 Creacion de un proyecto:
 	ng new my-first-app
-	
+
 Ejecutar en servidor
 	ng serve
-	
+
 Instalar dependencia, por ejemplo Bootstrap en nuestro proyecto, tambien para produccion (--save)
 	npm install --save bootstrap
-	
+
 Configurar en el .angular-cli.json
 	"styles": [
 	        "../node_modules/bootstrap/dist/css/bootstrap.min.css",
 	        "styles.css"
 	]
-	
-Por debajo CLI utiliza Webpack, una herramienta que empaqueta todos los JS y CSS y los añade al index.html
 
+Por debajo CLI utiliza Webpack, una herramienta que empaqueta todos los JS y CSS y los añade al index.html
