@@ -4,7 +4,7 @@ Angular
   	- un unico HTML, cambiamos su estado con nuestras operaciones. 
   	- si necesitamos cargar datos, lo hacemos lanzando en background y nuestros componentes van recargando los cambios segun se van resolviendo las peticiones.
 
-Instalacion del cliente:
+Instalacion del cliente de angular:
 	sudo npm install -g @angular/cli
 	
 Creacion de un proyecto:
@@ -12,3 +12,15 @@ Creacion de un proyecto:
 	
 Ejecutar en servidor
 	ng serve
+	
+Instalar dependencia, por ejemplo Bootstrap en nuestro proyecto, tambien para produccion (--save)
+	npm install --save bootstrap
+	
+Configurar en el .angular-cli.json
+	"styles": [
+	        "../node_modules/bootstrap/dist/css/bootstrap.min.css",
+	        "styles.css"
+	]
+	
+Por debajo CLI utiliza Webpack, una herramienta que empaqueta todos los JS y CSS y los añade al index.html
+
