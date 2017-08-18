@@ -48,3 +48,7 @@ index.html
       templateUrl: './server.component.html'
     })
     export class ServerComponent {}
+
+-------- Crear Components usando el CLI -------
+
+ng generate component servers -> ng g c servers (es una abreviatura) 
