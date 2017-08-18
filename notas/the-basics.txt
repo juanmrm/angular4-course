@@ -51,4 +51,10 @@ index.html
 
 -------- Crear Components usando el CLI -------
 
-ng generate component servers -> ng g c servers (es una abreviatura) 
+ng generate component servers -> ng g c servers (es una abreviatura)
+
+-------- Styles for Components ---------
+
+  - Por ejemplo usando clases de bootstrap en los html de los componentes
+  - En el fichero xxxx.component.css
+  - En el xxxx.component.ts Inline
