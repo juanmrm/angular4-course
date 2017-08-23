@@ -58,3 +58,32 @@ ng generate component servers -> ng g c servers (es una abreviatura)
   - Por ejemplo usando clases de bootstrap en los html de los componentes
   - En el fichero xxxx.component.css
   - En el xxxx.component.ts Inline
+
+------- Databinding (properties and events)--------
+
+  - String Interpolation:
+    {{ expression }} //expression debe retornar un String o un objeto que JS pase a String, puede ser un metodo, un texto, una propiedad etc...
+    p.e: {{ 'Server' }}, {{ serverId }}, {{ getServerStatus() }}, <p> {{ allowNewServer }} </p>
+
+  - Property Binding: binding de expresiones de typescript / javascript con atributos de los tags HTML
+    <button type="button" [disabled] = "!allowNewServer">Add Server</button>
+    <p [innerText] = "allowNewServer"></p>
+
+  - Event binding: incorporar a los controles HTML funcionalidad de nuestro codigo
+    p.e : para el evento onclick del botón
+      <button (click)="onCreateServer()">Add Server</button>
+
+  - How do you know to which Properties or Events of HTML Elements you may bind?
+    You can basically bind to all Properties and Events - a good idea is to console.log() the element you're interested in
+    to see which properties and events it offers.
+      p.e: var result = document.getElementsByTagName("p"); //recuperamos todos los p's del documento HTML y hacemos
+        console.log(result) para explorarlos
+
+  - Passing and using data with event binding:
+    <input type="text" (input)="onUpdateServerName($event)"> //Con $event le estamos pasando el evento que se genera a nuestro metodo
+
+    //En nuestro metodo
+    onUpdateServerName(event: Event) {
+      //console.log(event);
+      this.serverName = (<HTMLInputElement>event.target).value; //Casting of the element to HTMLInputElement
+    }
