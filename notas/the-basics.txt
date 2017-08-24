@@ -59,7 +59,11 @@ ng generate component servers -> ng g c servers (es una abreviatura)
   - En el fichero xxxx.component.css
   - En el xxxx.component.ts Inline
 
-------- Databinding (properties and events)--------
+------- Databinding 4 formas (properties and events)--------
+  String Interpolation
+  Property Binding
+  Event binding
+  Two Way databinding
 
   - String Interpolation:
     {{ expression }} //expression debe retornar un String o un objeto que JS pase a String, puede ser un metodo, un texto, una propiedad etc...
@@ -73,7 +77,7 @@ ng generate component servers -> ng g c servers (es una abreviatura)
     p.e : para el evento onclick del botón
       <button (click)="onCreateServer()">Add Server</button>
 
-  - How do you know to which Properties or Events of HTML Elements you may bind?
+  - NOTE: How do you know to which Properties or Events of HTML Elements you may bind?
     You can basically bind to all Properties and Events - a good idea is to console.log() the element you're interested in
     to see which properties and events it offers.
       p.e: var result = document.getElementsByTagName("p"); //recuperamos todos los p's del documento HTML y hacemos
@@ -87,3 +91,14 @@ ng generate component servers -> ng g c servers (es una abreviatura)
       //console.log(event);
       this.serverName = (<HTMLInputElement>event.target).value; //Casting of the element to HTMLInputElement
     }
+
+  - Two Way databinding (Important: FormsModule is Required for Two-Way-Binding).
+      Requisitos:
+        - Adding the FormsModule  to the imports[] array in the AppModule (app.module.ts).
+        - import { FormsModule } from '@angular/forms';
+
+
+    Binding in two directions. Una forma sencilla de reaccionar a eventos en las 2 direcciones.
+    Aqui si escribimos en el input se va actualizando el texto, pero si en otra parte se actualiza la variable serverName, nuestro
+    input va a reflejar tambien los cambios automaticamente.
+    p.e: <input type="text" class="form-control" [(ngModel)]="serverName">
