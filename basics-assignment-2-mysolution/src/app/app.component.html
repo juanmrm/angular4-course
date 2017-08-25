@@ -5,6 +5,4 @@
   <li>Upon clicking the button, the username should be reset to an empty string</li>
 </ol>
 
-<input type="text" [(ngModel)]="username">
-<p>{{ username }}</p>
-<button type="button" name="IfNotEmptyUsername" [disabled]="isUsernameEmpty()"></button>
+<app-username-reset></app-username-reset>
