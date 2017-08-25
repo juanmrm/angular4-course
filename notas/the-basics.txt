@@ -102,3 +102,29 @@ ng generate component servers -> ng g c servers (es una abreviatura)
     Aqui si escribimos en el input se va actualizando el texto, pero si en otra parte se actualiza la variable serverName, nuestro
     input va a reflejar tambien los cambios automaticamente.
     p.e: <input type="text" class="form-control" [(ngModel)]="serverName">
+
+  -------------------- Directives -------------------------------
+
+    Las directivas con instrucciones en el DOM.
+
+    Los componentes que creamos al final funcionan como directivas, pero tambien hay built-in directives y podemos definir las nuestras.
+
+    Built-in directives:
+
+    Structural Directives (empiezan por *): cambian el DOM añadiendo / borrando elementos. No son elementos hidden.
+      - *ngIf: conditional if. Podemos añadir un else y usar otra directiva.
+        p.e: <p *ngIf="serverCreated; else noServer">Server was created. My server name is {{ serverName }}</p>
+      <ng-template #noServer>
+        <p>No server was created!</p>
+      </ng-template
+
+      - *ngFor: repeating an element.
+        p.e: <app-server *ngFor="let server of servers" ></app-server>
+
+    Attribute Directives: no añaden / borran elementos. Solo cambian el estado del elemento donde se pone la directiva.
+      - ngStyle: cambiar los estilos dinamicos
+        p.e: <p [ngStyle]="{backgroundColor: getColor()}">{{ 'Server' }} with ID {{ serverId }} is {{ getServerStatus() }}</p>
+                            //Dentro de {} ponemos typescript expressions
+
+      -ngClass: añadir o quitar clases de estilos dinamicamente.
+        p.e: [ngClass]="{online: serverStatus === 'online'}">{{ 'Server' }} with ID {{ serverId }} is {{ getServerStatus() }}
