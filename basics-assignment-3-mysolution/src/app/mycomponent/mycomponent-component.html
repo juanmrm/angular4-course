@@ -1,0 +1,13 @@
+<button
+  type="button"
+  class="btn btn-primary"
+  (click)="displayOrHideDetails()">Display Details</button>
+<p *ngIf="showDetails">'Secret Password = tuna'</p>
+<div class="col-xs-12">
+  <ul>
+    <li
+      *ngFor="let click of logClicks;let i=index"
+      [ngStyle]="{ backgroundColor: i >= 5 ? 'blue' : 'white'}"
+      [ngClass]="{ 'white-text': i >= 5}">{{ click }}</li>
+  </ul>
+</div>
