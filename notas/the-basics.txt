@@ -53,6 +53,8 @@ index.html
 
 ng generate component servers -> ng g c servers (es una abreviatura)
 
+ng g c /recipes/recipes-list --spec false (creando el componente dentro de la carpeta recipes y ademas sin test)
+
 -------- Styles for Components ---------
 
   - Por ejemplo usando clases de bootstrap en los html de los componentes
