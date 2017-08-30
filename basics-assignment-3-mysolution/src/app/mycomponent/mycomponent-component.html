@@ -7,7 +7,7 @@
   <ul>
     <li
       *ngFor="let click of logClicks;let i=index"
-      [ngStyle]="{ backgroundColor: i >= 5 ? 'blue' : 'white'}"
-      [ngClass]="{ 'white-text': i >= 5}">{{ click }}</li>
+      [ngStyle]="{ backgroundColor: i >= 4 ? 'blue' : 'white'}"
+      [ngClass]="{ 'white-text': i >= 4}">{{ click }}</li>
   </ul>
 </div>

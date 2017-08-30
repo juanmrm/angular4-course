@@ -118,8 +118,8 @@ ng generate component servers -> ng g c servers (es una abreviatura)
         <p>No server was created!</p>
       </ng-template
 
-      - *ngFor: repeating an element.
-        p.e: <app-server *ngFor="let server of servers" ></app-server>
+      - *ngFor: repeating an element (tracking the index in i)
+        p.e: <app-server *ngFor="let server of servers; let i=index" ></app-server>
 
     Attribute Directives: no añaden / borran elementos. Solo cambian el estado del elemento donde se pone la directiva.
       - ngStyle: cambiar los estilos dinamicos
