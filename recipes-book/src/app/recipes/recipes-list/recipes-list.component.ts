@@ -11,10 +11,11 @@ export class RecipesListComponent implements OnInit {
   recipes: Recipe[] = [
     new Recipe('A Test Recipe',
               'This is simply a test',
+              'http://www.pequerecetas.com/wp-content/uploads/2011/02/solomillo-de-cerdo-al-horno1.jpg'),
+    new Recipe('A Test Recipe',
+              'This is simply a test',
               'http://www.pequerecetas.com/wp-content/uploads/2011/02/solomillo-de-cerdo-al-horno1.jpg')
-
   ];
-
 
   constructor() { }
 
