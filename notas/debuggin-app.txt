@@ -1,0 +1,11 @@
+Debug de la aplicación con Developer Tools.
+
+NOTA: muy interesante la extension augury, la instalamos y podemos navegar por la aplicación
+  analizando en detalle los componentes, el grafo de dependencias entre ellos, las propiedades etc...
+
+En desarrollo el CLI de Angular nos da la funcionalidad de usar Source Maps.
+
+Nuestros ficheros de typescript los encontraremos en Developer Tools -> Sources -> Webpack://
+
+Tambien podemos revisar el main de la aplicación y al pinchar en el modulo concreto se nos abrirá el fichero typescript
+correspondiente, pero esto puede ser mas farragoso.
