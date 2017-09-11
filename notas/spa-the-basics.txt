@@ -1,0 +1,34 @@
+SPA el server solo nos sirve 1 pagina que es el index.html
+
+En index.html tenemos el app-root, no es una tag html, es un componente que ha sido generado por el CLI de Angular
+y lo tenemos en src/app. En el app.component.ts tenemos la definicion (selector, template y styleUrls)
+
+En el index.html final que nos proporciona el servidor se han incluido scripts que estan importados.
+
+El primer codigo que se ejecuta es el que esta en main.ts
+  platformBrowserDynamic().bootstrapModule(AppModule); // Start AppModule
+
+index.html
+  -> scripts in body
+    -> main.ts (platformBrowserDynamic().bootstrapModule(AppModule);)
+      -> app.module.ts (bootstrap: [AppComponent], indicamos la lista de componentes que debe conocer Angular cuando analiza el index.html)
+        -> app.component.ts -> con esto index.html sabe como interpretar el app-root que aparecia
+
+---------Modulos -----------
+
+  Angular utiliza los componentes para contruir las paginas web
+  Los modulos sirven para empaquetar / agrupar diferentes piezas, por ejemplo Components en paquetes (packages).
+
+  @NgModule({ //Decorator, como lo es por ejemplo @Component
+    declarations: [ //Registramos los componentes de nuestra App y añadiremos el import correspondiente
+      AppComponent
+    ],
+    imports: [ //importaciones de otros modulos que necesitemos
+      BrowserModule,
+      FormsModule,
+      HttpModule
+    ],
+    providers: [],
+    bootstrap: [AppComponent] //Le indica a Angular que componente tiene que reconocer cuando arranca la aplicacion, al analizar index.html
+  })
+  export class AppModule { }

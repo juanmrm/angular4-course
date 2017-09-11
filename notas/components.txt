@@ -1,0 +1,34 @@
+------- Componentes --------
+
+  Cada uno cuenta con su template, sus estilos, su lógica etc...
+
+  AppComponent definido en app.component.ts es un componente especial (es el pricipal, root component)
+
+  El resto de componentes se iran añadiendo en  app.component.html NO en el index.html
+
+  import { Component } from '@angular/core';
+
+    @Component({
+      selector: 'app-server',
+      templateUrl: './server.component.html'
+    })
+    export class ServerComponent {}
+
+-------- Crear Components usando el CLI -------
+
+ng generate component servers -> ng g c servers (es una abreviatura)
+
+ng g c /recipes/recipes-list --spec false (creando el componente dentro de la carpeta recipes y ademas sin test)
+
+------- Lifecycle ----------------------------
+
+Tenemos una serie de puntos de enganche:
+  ngOnChanges: despues de que se cambie el valor de algun @Input
+  ngOnInit: se llama cuando se ha terminado de inicializar el componente, despues del constructor.
+            Todavia no se ha añadido al DOM.
+  ngDoCheck: se llama siempre que se lanza un ciclo de comprobación de cambios por parte de Angular.
+  ngAfterContentInit: se llama despues de que el contenido (ng-content) se haya proyectado a la vista.
+  ngAfterContentChecked: se llama cada vez que se el contenido proyectado se checkea.
+  ngAfterViewInit: se llama despues de que la vista (y sus vistas hijas) haya sido inicializada (renderizada)
+  ngAfterViewChecked: se llama cada vez que la vista (y sus vistas hijas) son chequeadas.
+  ngOnDestroy: justo antes de que el componente vaya a ser eliminado.

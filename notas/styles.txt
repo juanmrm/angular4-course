@@ -1,0 +1,25 @@
+-------- Styles for Components ---------
+
+  - Por ejemplo usando clases de bootstrap en los html de los componentes
+  - En el fichero xxxx.component.css
+  - En el xxxx.component.ts Inline
+
+-------- View Encapsulation -------------
+
+Teoricamente CSS no entiende de ambitos locales al componente, es decir que si modificamos por ejemplo el app.component.css
+y añadimos p.e,
+
+p {
+  color: blue;
+}
+
+Esperariamos que todos los parrafos de nuestra aplicación se viesen azules.
+
+Pues esto no es asi, cada componente tiene su CSS, y esto se consigue porque Angular genera y da identificadores unicos a cada tag
+de nuestro template del componente y la CSS asociada aplica a estos identificadores (no es el comportamiento por defecto del browser).
+
+Podemos cambiar el comportamiento en el Component, con:
+
+  encapsulation: ViewEncapsulation.None; (None, Native (Shadow dom), Emulated (Default))
+
+  OJO!: si ponemos None, serian estilos globales a la aplicacion

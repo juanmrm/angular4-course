@@ -1,0 +1,82 @@
+------- Databinding 4 formas (properties and events binding)--------
+  String Interpolation
+  Property Binding
+  Event binding
+  Two Way databinding
+
+  - String Interpolation:
+    {{ expression }} //expression debe retornar un String o un objeto que JS pase a String, puede ser un metodo, un texto, una propiedad etc...
+    p.e: {{ 'Server' }}, {{ serverId }}, {{ getServerStatus() }}, <p> {{ allowNewServer }} </p>
+
+  - Property Binding: binding de expresiones de typescript / javascript con atributos de los tags HTML
+    <button type="button" [disabled] = "!allowNewServer">Add Server</button>
+    <p [innerText] = "allowNewServer"></p>
+
+  - Event binding: incorporar a los controles HTML funcionalidad de nuestro codigo
+    p.e : para el evento onclick del botón
+      <button (click)="onCreateServer()">Add Server</button>
+
+  - NOTE: How do you know to which Properties or Events of HTML Elements you may bind?
+    You can basically bind to all Properties and Events - a good idea is to console.log() the element you're interested in
+    to see which properties and events it offers.
+      p.e: var result = document.getElementsByTagName("p"); //recuperamos todos los p's del documento HTML y hacemos
+        console.log(result) para explorarlos
+
+  - Passing and using data with event binding:
+    <input type="text" (input)="onUpdateServerName($event)"> //Con $event le estamos pasando el evento que se genera a nuestro metodo
+
+    //En nuestro metodo
+    onUpdateServerName(event: Event) {
+      //console.log(event);
+      this.serverName = (<HTMLInputElement>event.target).value; //Casting of the element to HTMLInputElement
+    }
+
+  - Two Way databinding (Important: FormsModule is Required for Two-Way-Binding).
+      Requisitos:
+        - Adding the FormsModule  to the imports[] array in the AppModule (app.module.ts).
+        - import { FormsModule } from '@angular/forms';
+
+
+    Binding in two directions. Una forma sencilla de reaccionar a eventos en las 2 direcciones.
+    Aqui si escribimos en el input se va actualizando el texto, pero si en otra parte se actualiza la variable serverName, nuestro
+    input va a reflejar tambien los cambios automaticamente.
+    p.e: <input type="text" class="form-control" [(ngModel)]="serverName">
+
+-------------------- Custom property Binding--------------------
+
+  Por defecto las properties de los componentes sólo son accesibles dentro de estos componentes, no son accesibles desde fuera de los
+  mismos.
+
+  Comunicación Padre -> Hijo
+  Si queremos escribir en un component hijo desde el padre tenemos que anotarlo con @Input('alias').
+    import Input from '@angular/core';
+    @Input('srvElement') element: { type: string, name: string, content: string }; //Podemos indicar un alias con el que exponemos hacia afuera.
+
+-------------------- Binding to custom events ------------------
+  Comunicación Hijo -> Padre.
+  Se trata de emitir eventos que contienen informacion requerida por otro componente con @Output('alias')
+
+  p.e:
+    En app.component.html:
+      <app-cockpit
+        (serverCreated) = "onServerAdded($event)">
+      </app-cockpit>
+
+    En app.component.ts:
+      onServerAdded(serverData: {serverName: string, serverContent: string}) {
+        this.serverElements.push({
+          type: 'server',
+          name: serverData.serverName,
+          content: serverData.serverContent
+          });
+        }
+
+    En cockpit.component.ts:
+      @Output() serverCreated = new EventEmitter<{serverName: string, serverContent: string}>();
+
+      onAddServer() {
+        this.serverCreated.emit({
+          serverName: this.newServerName,
+          serverContent: this.newServerContent
+        });
+      }

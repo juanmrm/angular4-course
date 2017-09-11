@@ -1,0 +1,53 @@
+----------------- Using local reference --------------
+
+  Se pueden poner en cualquier tag de HTML, y nos devuelve el elemento al completo.
+
+  Interesante sino queremos / no necesitamos utilizar two-way-databinding
+
+  En el .html:
+    <input
+      type="text"
+      class="form-control"
+      #serverNameInput>
+
+  En el .ts:
+
+    onAddServer(serverNameInput: HTMLInputElement) {
+      this.serverCreated.emit({
+        serverName: serverNameInput.value,
+        serverContent: this.newServerContent
+      });
+    }
+
+  ---------------- Getting access to the Template and DOM with @ViewChild
+
+  En el .html:
+    <input
+      type="text"
+      class="form-control"
+      #serverContentInput>
+
+  En el .ts:
+    @ViewChild('serverContentInput') serverContentInput: ElementRef;
+
+    this.serverContentInput.nativeElement.value
+
+
+  --------------- Proyect code from other element ---------------------
+
+  Usamos ng-content, que sirve en nuestro componente como punto de enganche para el codigo htlm que nos inyectan.
+
+  server.element.component.html:
+    <div class="panel-body">
+      <ng-content></ng-content>
+    </div>
+
+  app.component.html:
+    <app-server-element
+      *ngFor="let serverElement of serverElements"
+      [srvElement]="serverElement">
+      <p>
+        <strong *ngIf="serverElement.type === 'server'" style="color: red">{{ serverElement.content }}</strong>
+        <em *ngIf="serverElement.type === 'blueprint'">{{ serverElement.content }}</em>
+      </p>
+    </app-server-element>
