@@ -61,7 +61,7 @@ ng g c /recipes/recipes-list --spec false (creando el componente dentro de la ca
   - En el fichero xxxx.component.css
   - En el xxxx.component.ts Inline
 
-------- Databinding 4 formas (properties and events)--------
+------- Databinding 4 formas (properties and events binding)--------
   String Interpolation
   Property Binding
   Event binding
@@ -130,3 +130,40 @@ ng g c /recipes/recipes-list --spec false (creando el componente dentro de la ca
 
       -ngClass: añadir o quitar clases de estilos dinamicamente.
         p.e: [ngClass]="{online: serverStatus === 'online'}">{{ 'Server' }} with ID {{ serverId }} is {{ getServerStatus() }}
+
+    -------------------- Custom property Binding--------------------
+
+    Por defecto las properties de los componentes sólo son accesibles dentro de estos componentes, no son accesibles desde fuera de los
+    mismos.
+
+    Si queremos que una propiedad de nuestro componente sea accesible por otros componentes padres, tenemos que anotarlo asi.
+      import Input from '@angular/core';
+      @Input('srvElement') element: { type: string, name: string, content: string }; //Podemos indicar un alias con el que exponemos hacia afuera.
+
+    -------------------- Binding to custom events ------------------
+      Se trata de emitir eventos que contienen informacion requerida por otro componente.
+
+      p.e:
+        En app.component.html:
+          <app-cockpit
+            (serverCreated) = "onServerAdded($event)">
+          </app-cockpit>
+
+        En app.component.ts:
+          onServerAdded(serverData: {serverName: string, serverContent: string}) {
+            this.serverElements.push({
+              type: 'server',
+              name: serverData.serverName,
+              content: serverData.serverContent
+              });
+            }
+
+        En cockpit.component.ts:
+          @Output() serverCreated = new EventEmitter<{serverName: string, serverContent: string}>();
+
+          onAddServer() {
+            this.serverCreated.emit({
+              serverName: this.newServerName,
+              serverContent: this.newServerContent
+            });
+          }

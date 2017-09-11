@@ -1,0 +1,26 @@
+------------------
+  Inicializar variables:
+
+  variable sin tipo definido es any. No debemos. Lo suyo es definir el tipo.
+
+  Mejor tipos con minuscula (son tipos primitivos)
+    string
+    number
+    boolean
+
+  Si no le damos valor inicial sera undefined.
+
+  Definicion de arrays. Hay dos formas:
+    peliculas: PeliculasModel[];
+    peliculas: Array<PeliculasModel>;
+
+  strings: mejor inicializar con '' en vez de ""
+
+------------------
+  Inicializar un componente de Angular:
+    - En el constructor solo le pasamos las dependencias que necesitamos inyectar.
+      No hay que poner ninguna anotacion especial. El IoC se encargará de inyectarlo.
+
+    - En el ngOnInit() hacemos logica adicional, llamadas al servidor...
+
+----------------- Ciclo de vida de los componentes

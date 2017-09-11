@@ -1,6 +1,6 @@
 Debug de la aplicación con Developer Tools.
 
-NOTA: muy interesante la extension augury, la instalamos y podemos navegar por la aplicación
+NOTA: muy interesante la extension Augury, la instalamos y podemos navegar por la aplicación
   analizando en detalle los componentes, el grafo de dependencias entre ellos, las propiedades etc...
 
 En desarrollo el CLI de Angular nos da la funcionalidad de usar Source Maps.
