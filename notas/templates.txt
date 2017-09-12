@@ -51,3 +51,14 @@
         <em *ngIf="serverElement.type === 'blueprint'">{{ serverElement.content }}</em>
       </p>
     </app-server-element>
+
+  ------------- Getting access to the projected content (ng-content)--------------
+
+  En el app.component.html:
+    <p #contentParagraph>
+
+  En el server.element.component.html:
+    <ng-content></ng-content>
+
+  Ene el server.component.ts
+    @ContentChild('contentParagraph') paragraph: ElementRef;
