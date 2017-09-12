@@ -53,7 +53,7 @@
     @Input('srvElement') element: { type: string, name: string, content: string }; //Podemos indicar un alias con el que exponemos hacia afuera.
 
 -------------------- Binding to custom events ------------------
-  Comunicación Hijo -> Padre.
+  Comunicación solo de un Hijo -> Padre. Si queremos comunicarnos con el abuelo tendria que ser el padre el que emitiera otro evento.
   Se trata de emitir eventos que contienen informacion requerida por otro componente con @Output('alias')
 
   p.e:
