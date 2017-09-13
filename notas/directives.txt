@@ -73,3 +73,29 @@
   ng generate directive mydirective
   ng g d mydirective (es una abreviatura)
 
+  -------- Utilizar HostListener para escuchar eventos del elemento --------
+
+     Reaccionar ante determinados eventos de nuestro elemento html, donde tenemos puesta la directiva.
+
+     @HostListener('mouseenter') mouseover(eventData: Event) {
+        this.renderer.setStyle(this.elRef.nativeElement, 'background-color', 'blue');
+      }
+
+  --------- Utilizar HostBinding para engancharse con propiedades del elemento -------
+
+    Enlazarnos directamente con determinadas propiedades de nuestro elemento html.
+
+    @HostBinding('style.backgroundColor') backgroundColor: string = 'transparent';
+
+  -------- Utilizar Input para pasar parametros de entrada a la directiva ------------
+    @Directive({
+        selector: '[appBetterHighlight]'
+     })
+    export class BetterHighlightDirective {
+        @Input() defaultColor: string = 'transparent';
+        @Input('appBetterHighlight') highlightColor: string = 'blue'; //
+
+    En el html:
+        <p appBetterHighlight [defaultColor] = "'yellow'" [highlightColor] = "'red" >Style me with a better directive.</p>
+
+        <p [appBetterHighlight]="'red'" defaultColor = "yellow">Style me with a better directive.</p> //Es equivalente al de arriba
