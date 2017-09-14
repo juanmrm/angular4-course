@@ -20,6 +20,15 @@
     - *ngFor: repeating an element (tracking the index in i)
       p.e: <app-server *ngFor="let server of servers; let i=index" ></app-server>
 
+    - ngSwitch: adds / removes DOM sub-trees when the nest match expressions matches the switch expression.
+      p.e:
+            <div ngSwitch="value">
+              <p *ngSwitchCase="5">Value is 5</p>
+              <p *ngSwitchCase="10">Value is 10</p>
+              <p *ngSwitchCase="100">Value is 100</p>
+              <p *ngSwitchDefault>Value is Default</p>
+            </div>
+
   - ATTRIBUTE Directives: no añaden / borran elementos. Solo cambian el estado del elemento donde se pone la directiva.
 
     - ngStyle: cambiar los estilos dinamicos
