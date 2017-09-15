@@ -1,0 +1,22 @@
+Otro componente que funciona como una unidad central de logica que usamos para no duplicar código en nuestra aplicación.
+Por ejemplo para hacer logging o para almacenar datos (como un repositorio central).
+
+Es una clase de typescript normal sin ningun Decorator adicional.
+
+------- Inyectar el servicio (Angular Dependency Injector)---------
+
+    Angular Dependency Injector (Parecido al IoC de Spring Framework).
+
+    En el componente en el que necesitemos utilizarlo (propiedad providers):
+
+        @Component({
+          selector: 'app-new-account',
+          templateUrl: './new-account.component.html',
+          styleUrls: ['./new-account.component.css'],
+          providers: [LoggingService]
+        })
+
+        Y en el constructor:
+
+            constructor(private logginService: LoggingService) {}
+
