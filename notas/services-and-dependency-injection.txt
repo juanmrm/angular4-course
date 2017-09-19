@@ -20,3 +20,5 @@ Es una clase de typescript normal sin ningun Decorator adicional.
 
             constructor(private logginService: LoggingService) {}
 
+
+    Si en un servicio necesitamos inyectar la dependencia de otro servicio, debermos anotar la clase con @Injectable().
