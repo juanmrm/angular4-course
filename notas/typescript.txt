@@ -28,4 +28,10 @@
 
 ----------------- Manejo de las excepciones ----------------
 
-  
+
+----------------- Operadores especiales -------------------
+Spread operator: p.e en listas
+
+  addIngredients(ingredients: Ingredient[]) {
+    this.ingredients.push(...ingredients); //Pasar todos los elementos del array original transformados a una lista que si acepta el metodo push (Spread operator)
+  }

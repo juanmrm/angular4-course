@@ -1,3 +1,5 @@
+CROSS COMPONENT COMUNICATION.
+
 Otro componente que funciona como una unidad central de logica que usamos para no duplicar código en nuestra aplicación.
 Por ejemplo para hacer logging o para almacenar datos (como un repositorio central).
 
