@@ -1,0 +1,119 @@
+Sirve para simular la navegación de cara al usuario entre distintas páginas.
+
+No podemos navegar poniendo por ejemplo <a href="/users">Users</a> porque esto recarga nuestra aplicacion y perdemos el estado.
+
+In the app.module
+
+-- Imports
+
+    import { Routes, RouterModule } from '@angular/router';
+
+-- Defining the routes
+
+    const appRoutes: Routes = [
+      { path: '', component: HomeComponent },
+      { path: 'users', component: UsersComponent },
+      { path: 'servers', component: ServerComponent }
+    ]
+
+-- Register the routing configuration in imports
+
+    RouterModule.forRoot(appRoutes)
+
+-- In the template, mark the place for inserting the component
+
+    <router-outlet></router-outlet>
+
+    For routing in the templates we use
+      routerLink="/desired-route"
+        or
+      [routerLink] = "['/desired-route']"
+
+    Las rutas que empiezan por / son rutas absolutas, sino se interpretan como rutas relativas
+    Tambien seria relativa ./desired-route y tambien podemos hacer ../../desired-route (subimos 2 niveles y navegamos a desired-route)
+
+-- Styling active router links:
+
+  routerLinkActive="css-class"
+      Se usa para que el router de Angular añada el estilo automaticamente si esta activa la ruta, esto es si el path actual contiene / forma
+        parte de nuestra ruta.
+
+  [routerLinkActiveOptions]="{exact: true} Only add this css active class if the path match exactly
+
+-- Load a route programatically:
+
+    import { Router, ActivatedRoute } from '@angular/router';
+
+    constructor(private router: Router, private route: ActivatedRoute) { }
+
+    this.router.navigate(['servers']) // Esta ruta sera relativa al raiz /
+
+    this.router.navigate(['servers'], {relativeTo: this.route}); //Esta ruta sera relativa a la ruta actual de navegacion que la tenemos como valor en this.route
+
+-- Passing parameters to routes - dinamic paths:
+
+  En las rutas podemos definir: { path: 'users/:id/:name', component: UserComponent }, // Aqui el id o el name son parametros
+
+-- Fetching route parameters in components:
+
+      ngOnInit() {
+        this.user = {
+          id: this.route.snapshot.params['id'],  // Using the snapshot -> only valid for one time.
+          name: this.route.snapshot.params['name']
+        };
+
+  -- Fetching Reactively with Route  Observable:
+
+        import { ActivatedRoute, Params} from '@angular/router';
+
+        this.route.params
+            .subscribe(
+              (params: Params) => {
+                this.user.id = params['id'];
+                this.user.name = params['name'];
+              }
+            );
+
+    -- Important note about Observables
+
+      Con los observables de angular que son del framework no necesitamos hacer el unsubscribe.
+      Con los nuestro deberiamos de hacer
+
+      import { Subscription } from 'rxjs/Subscription';
+
+      Implentar OnDestroy:
+
+      ngOnDestroy() {
+        this.xxxxSubscription.unsubscribe();
+      }
+
+    -- Passing Query Parameters (?param=value) and Fragments (#) Template and Programatically
+
+      In the template:
+
+        p.e: Construye una url /servers/5/edit/?allowEdit=1#loading
+
+        <a
+          [routerLink]="['/servers', 5, 'edit']"
+          [queryParams]="{allowEdit: '1'}"
+          fragment="loading" // Tb valdria [fragment] = "'loading'"
+          href="#">
+          {{ server.name }}
+        </a>
+
+      Programatically:
+
+        this.router.navigate(['/servers', id, 'edit'], {queryParams: {allowEdit: '1'}, fragment: 'loading'});
+
+    -- Retrieving Query Params and Fragments:
+
+      Acceder al snapshot:
+        console.log(this.route.snapshot.queryParams);
+        console.log(this.route.snapshot.fragment);
+
+      Con Observables:
+        this.route.queryParams.subscribe();
+        this.route.fragment.subscribe();
+
+
+}
