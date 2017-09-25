@@ -181,8 +181,7 @@ In the app.module
                 { path: ':id/edit', component: EditServerComponent }
               ] }
 
-        Definimos 2 servicios uno que sirve de filtro de control de acceso (AuthGuardService) y otro que sirve para saber
-        si el usuario esta o no logado.
+        Definimos el servicio AuthGuard encargado de gestionar el control de acceso.
 
             @Injectable()
             export class AuthGuard implements  CanActivate, CanActivateChild {
@@ -211,7 +210,7 @@ In the app.module
                 return this.canActivate(route, state);
               }
 
-
+             // Servicio de apoyo para gestionar el login
               export class AuthService {
                 loggedIn = false;
 
@@ -235,5 +234,32 @@ In the app.module
                 }
 
               }
+
+    -- Controlling navigation with canDeactivate: controlar si se puede abandonar una ruta estando en el estado actual.
+
+        En la ruta:
+            { path: ':id/edit', component: EditServerComponent, canDeactivate: [CanDeactivateGuard] }
+
+        Definimos una interfaz / servicio
+
+            export interface CanComponentDeactivate {
+
+              canDeactivate: () => Observable<boolean> | Promise<boolean> | boolean;
+            }
+
+            export class CanDeactivateGuard implements CanDeactivate<CanComponentDeactivate> {
+
+              // This will be called by the Angular Router
+              canDeactivate(component: CanComponentDeactivate,
+                            currentRoute: ActivatedRouteSnapshot,
+                            currentState: RouterStateSnapshot,
+                            nextState?: RouterStateSnapshot): Observable<boolean> | Promise<boolean> |
+                boolean {
+                  return component.canDeactivate();
+                }
+            }
+
+        En nuestro componente implementamos CanComponentDeactivate
+
 
 
