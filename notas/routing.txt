@@ -115,5 +115,125 @@ In the app.module
         this.route.queryParams.subscribe();
         this.route.fragment.subscribe();
 
+    -- Setting up Child Nested Routes:
 
-}
+        Usamos la propiedad children al definir las rutas.
+
+        { path: 'servers', component: ServersComponent, children: [
+            { path: ':id', component: ServerComponent },
+            { path: ':id/edit', component: EditServerComponent }
+          ] }
+
+        En el template html tendremos que añadir donde antes teniamos por ejemplo el <app-edit-server></app-edit-server>
+
+        <router-outlet><router-outlet> para que incorpore el nested element.
+
+    -- Configuring the Handling of Query Parameters: queryParamsHandling property when navigate
+
+           this.router.navigate(['edit'], { relativeTo: this.route, queryParamsHandling: 'preserve' }); //Merge, Preserve...
+
+    -- Redirecting and Wildcard Routes:
+
+        const appRoutes: Routes = [
+          { path: 'not-found', component: PageNotFoundComponent },
+          { path: '**', redirectTo: '/not-found'} //Tiene que ser la ultima ruta que configuramos porque sino iriamos siempre a not-found component
+        ]
+
+        La estrategia por defecto para el macheo de URLs es "prefix", es decir que si el path comienza por la ruta puesta...
+        Si queremos cambiar el comportamiento para que sea un macheo exacto hay que cambiar la estrategia a "full"
+            p.e: { path: '', redirectTo: '/somewhere-else', pathMatch: 'full' }
+
+    -- Outsourcing the Route Configuration
+
+        In app.module.ts:
+            import our module AppRoutingModule
+
+        Define our routing module:
+
+        const appRoutes: Routes = [
+          { path: '', component: HomeComponent },
+          { path: 'users', component: UsersComponent, children: [
+            { path: ':id/:name', component: UserComponent },
+          ] },
+          { path: 'not-found', component: PageNotFoundComponent },
+          { path: '**', redirectTo: '/not-found'}
+        ]
+
+        @NgModule({
+          imports: [
+            RouterModule.forRoot(appRoutes)
+          ],
+          exports: [
+            RouterModule
+          ]
+        })
+        export class AppRoutingModule { }
+
+    -- Route Guards: control de acceso para las rutas, padre e hijos
+
+        En el routing las protegemos con canActivate y canActivateChild:
+            { path: 'servers',
+                // canActivate: [AuthGuard],
+                canActivateChild: [AuthGuard],
+                component: ServersComponent,
+                children: [
+                { path: ':id', component: ServerComponent },
+                { path: ':id/edit', component: EditServerComponent }
+              ] }
+
+        Definimos 2 servicios uno que sirve de filtro de control de acceso (AuthGuardService) y otro que sirve para saber
+        si el usuario esta o no logado.
+
+            @Injectable()
+            export class AuthGuard implements  CanActivate, CanActivateChild {
+
+              constructor(private authService: AuthService, private router: Router) {}
+
+              //Puede funcionar asincronamente (retornando Observable o Promise) o sincronamente.
+              canActivate(route: ActivatedRouteSnapshot,
+                          state: RouterStateSnapshot,): Observable<boolean> | Promise<boolean> | boolean {
+
+                return this.authService.isAuthenticated()
+                  .then(
+                    (authenciated: boolean) => {
+                      if(authenciated) {
+                        return true
+                      } else {
+                        this.router.navigate(['/']);
+                      }
+                    }
+                  );
+              }
+
+              canActivateChild(route: ActivatedRouteSnapshot,
+                               state: RouterStateSnapshot,): Observable<boolean> | Promise<boolean> | boolean {
+
+                return this.canActivate(route, state);
+              }
+
+
+              export class AuthService {
+                loggedIn = false;
+
+                isAuthenticated() {
+                  const promise = new Promise(
+                    (resolve, reject) => {
+                      setTimeout(() => {
+                        resolve(this.loggedIn)
+                      }, 800)
+                    }
+                  )
+                  return promise;
+                }
+
+                login() {
+                  this.loggedIn = true;
+                }
+
+                logout() {
+                  this.loggedIn = false;
+                }
+
+              }
+
+
