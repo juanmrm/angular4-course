@@ -262,4 +262,58 @@ In the app.module
         En nuestro componente implementamos CanComponentDeactivate
 
 
+-- Passing Static Data to a Route
 
+        Definir la ruta, pasando los datos estaticos en data.
+          { path: 'not-found', component: ErrorPageComponent, data: {message: 'Page not found!'} }
+
+        En el componente:
+          this.errorMessage = this.route.snapshot.data['message']; // Si sabemos que no va a cambiar
+
+          this.route.data.subscribe( // En el caso de que pudiese cambiar dentro de esta pagina
+          (data: Data) => {
+            this.errorMessage = data['message'];
+          }
+        );
+
+        -- Resolving Dynamic Data with Resolve Guard: se trata de precargar los datos que va a necesitar nuestra vista (es otra forma de hacer, lo que solemos hacer en el onInit)
+
+          Definir la ruta indicando los resolvers.
+            { path: ':id', component: ServerComponent, resolve: {server: ServerResolver} } // En el objeto data, en la propiedad server se va a guardar el resultado del resolver.
+
+          Implementar el resolver: es un service que tendremos que indicar en el providers del module
+            p.e: un resolver que retorna un objeto de tipo server.
+
+            interface Server {
+              id: number,
+              name: string,
+              status: string
+            }
+
+            export class ServerResolver implements Resolve<Server> {
+              constructor(private serversService: ServersService) {  }
+
+              resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Server> | Promise<Server> | Server {
+                return this.serversService.getServer(+route.params['id']);
+              }
+            }
+
+            En nuestro componente:
+              this.route.data
+                .subscribe(
+                  (data: Data) => {
+                    this.server = data['server'];
+                    }
+                );
+
+          -- Understanding Location Strategies:
+
+            El servidor web siempre parsea la url y busca la pagina apropiada y es posible que la navegacion con rutas del tipo
+            hostname:4200/ruta1 no funcionen directamente en nuestro servidor web porque el servidor no va a encontrar la pagina y dara 404
+
+            Para todos los 404 deberíamos de devolver el index.html de nuestra aplicacion porque sino no funcionara.
+
+            Existe un modo adicional, antiguo de funcionamiento, que añade # a las rutas para evitar precisamente este problema, pero deberiamos evitarlo si es posible
+
+            RouterModule.forRoot(appRoutes, { useHash: true }) // De esta forma el servidor web no interpreta a partir del # y las rutas seran del tipo
+            hostname:4200/#/ruta1
