@@ -7,7 +7,7 @@ import {ServersComponent} from "./servers/servers.component";
 import {ServerComponent} from "./servers/server/server.component";
 import {EditServerComponent} from "./servers/edit-server/edit-server.component";
 import {PageNotFoundComponent} from "./page-not-found/page-not-found.component";
-import {AuthGuard} from "./auth-guard-service";
+import {AuthGuard} from "./auth-guard.service";
 import {CanDeactivateGuard} from "./servers/edit-server/can-deactivate-guard.service";
 
 const appRoutes: Routes = [

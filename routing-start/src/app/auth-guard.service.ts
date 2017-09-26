@@ -10,7 +10,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
 
   //Puede funcionar asincronamente (retornando Observable o Promise) o sincronamente.
   canActivate(route: ActivatedRouteSnapshot,
-              state: RouterStateSnapshot,): Observable<boolean> | Promise<boolean> | boolean {
+              state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
     return this.authService.isAuthenticated()
       .then(
