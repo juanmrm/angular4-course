@@ -62,7 +62,7 @@ In the app.module
           name: this.route.snapshot.params['name']
         };
 
-  -- Fetching Reactively with Route  Observable:
+  -- Fetching Reactively with Route Observable:
 
         import { ActivatedRoute, Params} from '@angular/router';
 

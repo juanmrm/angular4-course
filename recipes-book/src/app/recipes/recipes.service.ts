@@ -20,7 +20,7 @@ export class RecipeService {
                 new Ingredient('Pepinillo', 1),
                 new Ingredient('Patatas', 20),
               ]),
-    new Recipe('Solomillo de cerdo al horbo',
+    new Recipe('Solomillo de cerdo al horno',
               'Receta de solomillo de cerdo al horno',
               'http://www.pequerecetas.com/wp-content/uploads/2011/02/solomillo-de-cerdo-al-horno1.jpg',
               [
@@ -33,7 +33,13 @@ export class RecipeService {
   constructor(private slService: ShoppingListService) {}
 
   getRecipes() {
+    // Devolvemos una copia de la lista, pero no hace un deep copy, los objectos internos son los mismos punteros
+    // Podriamos crear una hard copy pero Object.assign(
     return this.recipes.slice();
+  }
+
+  getRecipe(index: number): Recipe {
+    return this.recipes[index];
   }
 
   addIngredientsToShoppingList(ingredients: Ingredient[]) {
