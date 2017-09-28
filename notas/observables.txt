@@ -1,0 +1,74 @@
+----------- Patron Observable -> Observer
+Observable -> fuente de informacion que emite los eventos
+Observer -> Se subscribe para recibir los eventos. Trata 3 casos (evemto, error, completar)
+
+Todo el manejo se encuentra en un paquete de terceros rxjs.
+
+Documentacion -> http://reactivex.io/rxjs/
+
+---------- Create a custom Observable -----------
+
+Importar:
+  import { Observable } from 'rxjs/Observable';
+  import 'rxjs';
+
+  - Ejemplo de Observable sencillo que emite numeros enteros infinitamente cada 1000ms
+
+      const myNumbers = Observable.interval(1000);
+      myNumbers.subscribe(
+        (number: number) => {
+          console.log(number);
+        }
+      );
+
+  - Ejemplo de Observable creado desde 0 y gestion de data, error y complete en el observer
+
+      const myObservable = Observable.create((observer: Observer<string>) => {
+        setTimeout(() => {
+          observer.next('first package'); // Pushes the first data package
+        }, 2000);
+        setTimeout(() => {
+          observer.next('second package'); // Pushes the second data package
+        }, 3000);
+        // setTimeout(() => {
+        //   observer.error('this does not work'); // Fails with this message
+        // }, 4000);
+        setTimeout(() => {
+          observer.complete(); // Complete. We won't see this if something before these complete fails.
+        }, 5000);
+        setTimeout(() => {
+          observer.next('third package'); // We will never recibe this package because it's completed.
+        }, 6000);
+      });
+
+      myObservable.subscribe(
+        (data: string) => { console.log(data) },
+        (error: string) => { console.log(error) },
+        () => { console.log('completed') },
+      );
+
+
+---------- Unsubscribe from custom Observables ------------------
+
+  Es probable que sino no nos desubscribimos de nuestros Custom Observables estemos creado Memory Leaks.
+
+  Aun habiendo abandonado un componente con la navegacion, nuestro Observer sigue escuchando el Observable.
+
+  Debemos hacer el unsubscribe, implementando OnDestroy interface (ngOnDestroy).
+
+  Para los Observables de Angular la desubscripcion es automatica, pero es una buena practica que nos indiquemos el unsubscribe siempre para
+  acostumbrarnos a usarlo.
+
+    import { Subscription } from 'rxjs/Subscription';
+
+    customObservable: Subscription;
+
+    this.customObservable = myObservable.subscribe(
+      (data: string) => { console.log(data) },
+      (error: string) => { console.log(error) },
+      () => { console.log('completed') },
+    );
+
+    ngOnDestroy() {
+      this.customObservable.unsubscribe();
+    }
