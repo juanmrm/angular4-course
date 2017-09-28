@@ -10,7 +10,7 @@ Documentacion -> http://reactivex.io/rxjs/
 
 Importar:
   import { Observable } from 'rxjs/Observable';
-  import 'rxjs';
+  import 'rxjs/Rx';
 
   - Ejemplo de Observable sencillo que emite numeros enteros infinitamente cada 1000ms
 
@@ -72,3 +72,35 @@ Importar:
     ngOnDestroy() {
       this.customObservable.unsubscribe();
     }
+
+  ---------------- Subject -> Observable y Observer en el mismo objeto ------------------
+
+    Similar al EventEmitter de Angular (Cross Component Comunication)
+
+    Es una buena practica utilizar Subject en vez del emiter (next en vez de emit y subscribe para consumir).
+
+    import { Subject } from 'rxjs/Subject';
+
+    userActivated = new Subject(); // Define el Subject
+
+    this.usersService.userActivated.next(this.id) // Emitir eventos
+
+    this.usersService.userActivated.subscribe(
+        (id: number) => {
+          console.log(id);
+        }
+      );
+
+    ----------------- Operators on Observables -> Chain Observables ----------------
+
+      Hay muchisimas operaciones a aplicar sobre los Observables que retornan nuevos Observables
+
+      Documentacion: http://reactivex.io/rxjs/class/es6/Observable.js~Observable.html
+
+      p.e:
+        const myNumbers = Observable.interval(1000)
+          .map(
+            (data: number) => {
+              return data * 2; // return the double of the data recieved.
+            }
+          );
