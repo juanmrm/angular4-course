@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Recipe } from '../recipe.model';
 import { RecipeService } from '../recipes.service';
-import {ActivatedRoute, Params} from "@angular/router";
+import {ActivatedRoute, Params, Router} from "@angular/router";
 
 
 @Component({
@@ -15,6 +15,7 @@ export class RecipesDetailComponent implements OnInit {
   id: number;
 
   constructor(private recipeService: RecipeService,
+              private router: Router,
               private route: ActivatedRoute) { }
 
   ngOnInit() {
@@ -32,6 +33,11 @@ export class RecipesDetailComponent implements OnInit {
 
   toShoppingList() {
     this.recipeService.addIngredientsToShoppingList(this.recipe.ingredients);
+  }
+
+  onEditRecipe() {
+    this.router.navigate(['edit'], { relativeTo: this.route}); // Notese que no necesitamos pasar el id, ya esta en la ruta relativa
+    // this.router.navigate(['../', this.id, 'edit'],  { relativeTo: this.route }); // Otra forma de hacer lo anterior, subiendo un nivel, pasando el id y edit
   }
 
 }
