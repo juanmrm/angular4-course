@@ -1,5 +1,7 @@
 -------------------- Directives -------------------------------
 
+  Todas las directivas: https://angular.io/api?type=directive
+
   Las directivas con instrucciones en el DOM.
 
   Los componentes que creamos al final funcionan como directivas, pero tambien hay built-in directives y podemos definir las nuestras.

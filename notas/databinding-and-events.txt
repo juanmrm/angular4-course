@@ -1,4 +1,7 @@
 ------- Databinding 4 formas (properties and events binding)--------
+
+https://angular.io/guide/architecture#!#data-binding
+
   String Interpolation
   Property Binding
   Event binding

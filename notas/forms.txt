@@ -1,0 +1,171 @@
+Working with Forms in Angular:
+
+- Asegurarse que en el app.module.ts esta importado el FormsModule (por defecto si es un proyecto creado con Angular CLI, deberia de estar).
+
+2 Aproximaciones: Template Driven vs Reactive
+
+------------------------------------------------------------------------
+-------------------------- Template Driven -----------------------------
+
+  Angular analiza el DOM y detecta el form tag como si fuese un selector, pero necesitamos indicarle a Angular que controles queremos tener registrados.
+  (No va a analizar los controles del form automaticamente).
+
+  1 - Pondremos ngModel en el control que queremos registrar.
+      Importante poner tambien el atributo name, para indicar con qué nombre lo registramos.
+
+      p.e:
+        <input
+          type="text"
+          id="username"
+          class="form-control"
+          ngModel
+          name='username'>
+
+  2 - Indicar el submit del form (no el por defecto del HTLM)
+
+      <form (ngSubmit)="onSubmit(f)" #f="ngForm"> // Asi es como indicamos a angular que queremos tener acceso a este objeto Javascript de angular
+                                                     que representa el formulario (Se lo estamos pasando a nuestro metodo onSubmit del component).
+
+  3 - Acceso al formulario en nuestro component
+
+    import { NgForm } from '@angular/forms';
+
+    3.1 - Primera forma: cuando hacemos el submit.
+
+      onSubmit(form: NgForm) {
+        ....
+      }
+
+    3.2 - Segunda forma: podemos tener acceso antes de hacer el submit (puede ser interesante)
+
+      @ViewChild('f') signupForm: NgForm;
+      onSubmit() {
+        this.signupForm....
+      }
+
+  4 - Introducir validaciones
+
+      Validadores: https://angular.io/api/forms/Validators
+
+      required // Default HTML atribute, detectado por Angular y tenido en cuenta para calcular el estado global del formulario.
+      email // Directiva de Angular, para validacion de un email.
+
+  5 - Usando el estado del formulario
+
+      5.1 Deshabilitar el boton de submit si el formulario tiene estado invalido
+        <button
+          class="btn btn-primary"
+          type="submit"
+          [disabled]="!f.valid">Submit // Using property binding
+        </button>
+
+      5.2 Trabajar con los estilos para señalar valores requeridos que faltan etc
+
+        p.e: remarcar los inputs invalidos en rojo, pero no desde el principio, sino aquellos que ya se ha tocado (ng-touched)
+
+        input.ng-invalid.ng-touched {
+          border: 1px solid red;
+        }
+
+      5.3 Mostrar mensajes de error condicionales para los controles
+
+        <input
+          type="email"
+          id="email"
+          class="form-control"
+          ngModel
+          name="email"
+          email
+          #email="ngModel"> // Usar local reference y ngModel.
+        <span class="help-block" *ngIf="!email.valid && email.touched">Please enter a valid email!</span> // Usando los estados del control
+
+  6 - Asignar valores por defecto (One Way Binding)
+
+      <select
+        id="secret"
+        class="form-control"
+        [ngModel]="defaultQuestion" // En nuestro component tendremos por ejemplo defaultQuestion = 'pet'
+        name="secret">
+        <option value="pet">Your first Pet?</option>
+        <option value="teacher">Your first teacher?</option>
+      </select>
+
+  7 - Usar ngModel en ambos sentidos (Two Way Databinding)
+
+      Util cuando no solo queremos asignar valores por defecto sino que tambien queremos reaccionar ante cada cambio (en ambar direcciones)
+
+      <div class="form-group">
+        <textarea
+          name="questionAnswer"
+          rows="3"
+          class="form-control"
+          [(ngModel)]="answer">
+        </textarea>
+      </div>
+      <p>Your reply: {{ answer }}</p> // answer es una propiedad de nuestro component
+
+  8 - Agrupar controles (porque nos interese tener una estructura determinada para formularios complejos)
+
+    p.e: <div
+      id="user-data"
+      ngModelGroup="userData"
+      #userData="ngModelGroup">
+      .... //Los controles que necesitemos
+      </div>
+      <p *ngIf="!userData.valid && userData.touched">User Data is invalid!</p> // Por ejemplo sacar un mensaje cuando el contenido del grupo es invalido.
+
+  9 - Handling Radio Buttons
+
+    <div class="radio" *ngFor="let gender of genders" >
+      <label>
+        <input
+          type="radio"
+          name="gender"
+          ngModel
+          [value]="gender"
+          required>
+        {{ gender }}
+      </label>
+    </div>
+
+  9 - Establecer los valores del formulario desde codigo
+
+    @ViewChild('f') signupForm: NgForm;
+
+    // Todo el formulario
+    this.signupForm.setValue({
+      userData: {
+        username: suggestedName,
+        email: ''
+      },
+      secret: 'pet',
+      questionAnswer: '',
+      gender: 'male'
+    });
+
+    // Solo los elementos que nos interesa cambiar
+
+    this.signupForm.form.patchValue({
+      userData: {
+        username: suggestedName
+      }
+    });
+
+  10 - Using form Data
+
+    p.e: tenemos un objeto user con esa estructura y vamos guardando los valores. Ademas nos guardamos un flag para saber cuando se ha enviado el formulario.
+    onSubmit() {
+      this.submitted = true;
+      this.user.username = this.signupForm.value.userData.username;
+      this.user.email = this.signupForm.value.userData.email;
+      this.user.secretQuestion = this.signupForm.value.secret;
+      this.user.answer = this.signupForm.value.questionAnswer;
+      this.user.gender = this.signupForm.value.gender;
+    }
+
+  11 - Resetear formularios
+
+    this.signupForm.reset();
+    
+  ------------------------------------------------------------------------
+  -------------------------- Reactive Approach -----------------------------
