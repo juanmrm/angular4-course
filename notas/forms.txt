@@ -166,6 +166,21 @@ Working with Forms in Angular:
   11 - Resetear formularios
 
     this.signupForm.reset();
-    
-  ------------------------------------------------------------------------
+
+  --------------------------------------------------------------------------
   -------------------------- Reactive Approach -----------------------------
+
+  Se trata de crear el formulario programaticamente y engancharlo a nuestro template HTML
+
+  1 - Setup:
+
+    En app.module:
+      //import { FormsModule } from '@angular/forms'; // Este se necesita para Template Driven Approach
+      import { ReactiveFormsModule} from '@angular/forms';
+
+      Incluir ReactiveFormsModule en imports.
+
+    En nuestro component:
+      import { FormGroup } from '@angular/forms';
+      
+      signupForm: FormGroup;
