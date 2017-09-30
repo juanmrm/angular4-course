@@ -128,7 +128,7 @@ Working with Forms in Angular:
       </label>
     </div>
 
-  9 - Establecer los valores del formulario desde codigo
+  9 - Establecer los valores del formulario desde codigo (Setting and Patching values)
 
     @ViewChild('f') signupForm: NgForm;
 
@@ -180,7 +180,176 @@ Working with Forms in Angular:
 
       Incluir ReactiveFormsModule en imports.
 
-    En nuestro component:
-      import { FormGroup } from '@angular/forms';
-      
+  2 - Crear el formulario desde codigo.
+
+      import { FormGroup, FormControl } from '@angular/forms';
+
       signupForm: FormGroup;
+
+      this.signupForm = new FormGroup({
+        'username': new FormControl(null),
+        'email': new FormControl(null),
+        'gender': new FormControl('male')
+      });
+
+  3 - Sincronizar nuestro Formulario con nuestro template HTML (engancharlo)
+
+    3.1 Indicar a Angular no infiera el formGroup, que utilice el que le pasamos
+      <form [formGroup]="signupForm">
+
+    3.2 Indicar que controles tienen que conectarse con los inputs que tenemos en el html
+    <input
+      type="text"
+      id="username"
+      formControlName="username" // Tambien podemos usar property binding [formControlName]="'username'"
+      class="form-control">
+
+   4 - Submit del formulario
+      Igual que el Template Driven Approach, pero ya no tenemos que utilizar local reference para pasarselo a nuestro
+      metodo porque ya tenemos nuestro form en el component.
+
+      <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+
+   5 - Incluir validaciones
+
+       5.1 Configuramos los validadores para los controles definidos.
+
+         this.signupForm = new FormGroup({
+           'username': new FormControl(null, Validators.required),
+           'email': new FormControl(null, [Validators.required, Validators.email]),
+           'gender': new FormControl('male')
+         });
+
+        5.2 Mostrar mensajes de error para las validaciones
+
+          Usamos .get(path)
+
+          p.e: <span
+                  *ngIf="!signupForm.get('email').valid && signupForm.get('email').touched"
+                  class="help-block">Please enter a valid email!
+                </span>
+
+        5.3 Custom Validators
+
+          5.3.1 - Creamos la funcion que decide si el control es o no valido:
+            p.e:
+              forbiddenNames(control: FormControl): {[s: string]: boolean} {
+                  if (this.forbiddenUsernames.indexOf(control.value) !== -1) {
+                    return {'nameIsForbidden': true};
+                  }
+                  return null; // Validation is successful, form control is valid
+              }
+
+            5.3.2 - Añadir el validador (OJO con el bind de Javascript que tenemos que hacer aqui para vincular nuestro scope this)
+
+                this.signupForm = new FormGroup({
+                  'username': new FormControl(null, [Validators.required, this.forbiddenNames.bind(this)])
+                });
+
+            5.3.3 Usando el Error Code
+              <span *ngIf="signupForm.get('userData.username').errors['nameIsForbidden']">This name is invalid</span>
+              <span *ngIf="signupForm.get('userData.username').errors['required']">This field is invalid</span>
+
+            5.3.4 Custom Asycn Validator
+
+              p.e: un validador de email que comprueba que el email no sea 'test@test.com'
+
+              forbiddenEmails(control: FormControl): Promise<any> | Observable<any> {
+                const promise = new Promise<any>(
+                  (resolve, reject) => {
+                    setTimeout(() => {
+                      if(control.value === 'test@test.com') {
+                        resolve({'emailIsForbidden': true})
+                      } else {
+                        resolve(null);
+                      }
+                    }, 1500);
+                  }
+                );
+                return promise;
+              }
+
+              Agregar el validador (OJO aqui no estamos haciendo el bind porque no usamos this en el validador, sino habria que hacerlo)
+
+                this.signupForm = new FormGroup({
+                  'email': new FormControl(null, [Validators.required, Validators.email], this.forbiddenEmails)
+                });
+
+     6 - Agrupar controles FormGroup
+
+       this.signupForm = new FormGroup({
+         'userData': new FormGroup({
+           'username': new FormControl(null, Validators.required),
+           'email': new FormControl(null, [Validators.required, Validators.email]),
+         }),
+         'gender': new FormControl('male')
+       });
+
+      En el template:
+
+        <div formGroupName="userData">
+          <div class="form-group">
+            <input
+              type="text"
+              id="username"
+              formControlName="username"
+              class="form-control">
+            <span
+              *ngIf="!signupForm.get('userData.username').valid && signupForm.get('userData.username').touched"
+              class="help-block">Please enter a valid username!</span>
+          </div>
+        </div>
+
+      7 - Arrays of Forms Controls (FormArray)
+
+        Se trata de añadir dinamicamente controles a nuestro forumlario
+
+        7.1 En el component:
+
+          import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
+
+          this.signupForm = new FormGroup({
+            'hobbies': new FormArray([])
+          });
+
+          onAddHobby() {
+            const control = new FormControl(null, Validators.required);
+            (<FormArray>this.signupForm.get('hobbies')).push(control);
+          }
+
+        7.2 En el template (formArrayName)
+
+          <div formArrayName="hobbies">
+            <h4>Your Hobbies</h4>
+            <button
+              class="btn btn-default"
+              type="button"
+              (click)="onAddHobby()">Add Hobby
+            </button>
+            <div
+              class="form-group"
+              *ngFor="let hobbyControl of signupForm.get('hobbies').controls; let i = index">
+              <input type="text" class="form-control" [formControlName]="i">
+            </div>
+          </div>
+
+      8 - Reaccionar antes cambios de estados o cambios de valores
+
+        this.signupForm.valueChanges.subscribe(
+          (value) => {
+            console.log(value);
+          }
+        );
+        this.signupForm.statusChanges.subscribe(
+          (value) => {
+            console.log(value);
+          }
+        );
+
+      9 - Establecer los valores del formulario desde codigo (Setting and Patching values)
+
+        Igual que en  Template Driven Approach
+
+      10 - Resetear formularios
+
+        Igual que en  Template Driven Approach
