@@ -2,7 +2,7 @@
 
   Todas las directivas: https://angular.io/api?type=directive
 
-  Las directivas con instrucciones en el DOM.
+  Las directivas son instrucciones en el DOM.
 
   Los componentes que creamos al final funcionan como directivas, pero tambien hay built-in directives y podemos definir las nuestras.
 
@@ -15,9 +15,10 @@
 
     - *ngIf: conditional if. Podemos añadir un else y usar otra directiva.
       p.e: <p *ngIf="serverCreated; else noServer">Server was created. My server name is {{ serverName }}</p>
-    <ng-template #noServer>
-      <p>No server was created!</p>
-    </ng-template
+
+            <ng-template #noServer>
+              <p>No server was created!</p>
+            </ng-template
 
     - *ngFor: repeating an element (tracking the index in i)
       p.e: <app-server *ngFor="let server of servers; let i=index" ></app-server>
@@ -110,3 +111,23 @@
         <p appBetterHighlight [defaultColor] = "'yellow'" [highlightColor] = "'red" >Style me with a better directive.</p>
 
         <p [appBetterHighlight]="'red'" defaultColor = "yellow">Style me with a better directive.</p> //Es equivalente al de arriba
+
+    ----------- Creacion de directivas estructurales ----------------
+
+        p.e: una directiva que elimina / muestra el elemento solo si el parametro boleano de entrada es true.
+
+            @Directive({
+              selector: '[appUnless]'
+            })
+            export class UnlessDirective {
+              @Input() set appUnless(condition: boolean) {
+                if (!condition) {
+                  this.vcRef.createEmbeddedView(this.templateRef);
+                } else {
+                  this.vcRef.clear();
+                }
+              }
+
+              constructor(private templateRef: TemplateRef<any>, private vcRef: ViewContainerRef) { }
+
+            }
