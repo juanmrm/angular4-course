@@ -1,0 +1,61 @@
+Es una funcionalidad que permite tranformar output en un template.
+No queremos modificar la propiedad que hay por debajo, pero si la forma en la que se muestra.
+
+  p.e:
+    <p>{{ username | uppercase }}</p>
+
+ ------------- Built in Pipes ----------------------
+
+   https://angular.io/api?query=pipe
+
+  uppercase: pasar a mayusculas {{ server.instanceType | uppercase}} |
+  date: mostrar en formato fecha {{ server.started | date }}
+
+  -- Configurar la pipe
+
+    Le pasaremos parametros con :param1:param2:paramX
+      p.e: {{ server.started | date:'fullDate' }}
+
+  -- Combinar pipes:
+
+      El orden que se aplica es el definido de izquierda a derecha
+        p.e {{ server.started | date:'fullDate' | uppercase}}
+
+--------------- Creating a Custom Pipe -------------
+
+  1 - Define the pipe:
+    Añadir el decorator, implmentar el metodo transform
+
+    import { Pipe, PipeTransform } from '@angular/core';
+
+    @Pipe({
+      name: 'shorten'
+    })
+    export class ShortenPipe implements PipeTransform {
+      transform(value: string): string {
+        if (value.length > 10) {
+          return value.substring(0, 10) + ' ...';
+        }
+        return value;
+      }
+    }
+
+    En el template: {{ server.name | shorten }}
+
+  2 - Añadir la declaracion y el import en el app.module en la seccion declarations
+
+  3 - Añadir opciones de parametrizar la pipe:
+
+    @Pipe({
+      name: 'shorten'
+    })
+    export class ShortenPipe implements PipeTransform {
+      transform(value: string, limit: number): string {
+        if (value.length > limit) {
+          return value.substring(0, limit) + ' ...';
+        }
+        return value;
+      }
+    }
+
+    En el template: {{ server.name | shorten:15 }}
