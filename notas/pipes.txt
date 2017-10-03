@@ -23,6 +23,8 @@ No queremos modificar la propiedad que hay por debajo, pero si la forma en la qu
 
 --------------- Creating a Custom Pipe -------------
 
+  With the Cli: ng generate pipe name / ng g p name
+
   1 - Define the pipe:
     Añadir el decorator, implmentar el metodo transform
 
@@ -59,3 +61,38 @@ No queremos modificar la propiedad que hay por debajo, pero si la forma en la qu
     }
 
     En el template: {{ server.name | shorten:15 }}
+
+  4 - Otro ejemplo, de un filtro
+
+    *ngFor="let server of servers | filter:filteredStatus:'status'"
+
+    @Pipe({
+      name: 'filter'
+    })
+    export class FilterPipe implements PipeTransform {
+
+      transform(value: any, filterString: string, propName: string): any {
+        if (value.length === 0 || filterString === '') {
+          return value;
+        }
+        const resultArray = [];
+        for (const item of value) {
+          if(item[propName] === filterString){
+            resultArray.push(item);
+          }
+        }
+
+        return resultArray;
+      }
+    }
+
+    5 - Pure and Impure Pipe
+
+      Cambiar el input del pipe provoca el recalculo del resultado.
+      Cambiar los datos sobre los que se aplica la pipe no provocan el recalculo del resultado.
+
+      Podemos forzar a que se recalcule el resultado del pipe (OJO!: vigilar performance, puede dar problemas)
+        @Pipe({
+          name: 'filter',
+          pure: false
+        })
