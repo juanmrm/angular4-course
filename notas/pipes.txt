@@ -10,6 +10,9 @@ No queremos modificar la propiedad que hay por debajo, pero si la forma en la qu
 
   uppercase: pasar a mayusculas {{ server.instanceType | uppercase}} |
   date: mostrar en formato fecha {{ server.started | date }}
+  async:  Async pipe se subscribe a un Observable o Promesa retornando el ultimo valor que ha emitido.
+          Cuando un nuevo valor se emite, el componente comprueba el cambio. Cuando el componente se destruye, el pipe async se desubscribe automaticamente
+          para evitar memory leaks.
 
   -- Configurar la pipe
 
