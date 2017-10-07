@@ -33,6 +33,11 @@ export class RecipeService {
 
   constructor(private slService: ShoppingListService) {}
 
+  setRecipes(recipes: Recipe[]) {
+    this.recipes = recipes;
+    this.recipesChanged.next(this.recipes.slice())
+  }
+
   getRecipes() {
     // Devolvemos una copia de la lista, pero no hace un deep copy, los objectos internos son los mismos punteros
     // Podriamos crear una hard copy pero Object.assign(
