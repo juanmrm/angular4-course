@@ -1,0 +1,154 @@
+Para el ejemplo usaremos una base de datos de Firebase (https://firebase.google.com/?hl=es-419)
+
+-------------- Trabajando con Http ------------------
+
+  Es importante tener en cuenta que lo que construimos con los metodos que nos proporciona el servicio Http son Observable
+  y que hasta que no hacemos un subscribe, NO enviaremos la petición al servidor.
+
+1 - Project Configuration :
+
+    1.1 - En el app.module:
+
+      import { HttpModule } from '@angular/http';
+
+      imports: [
+        HttpModule
+      ]
+
+    1.2 - En nuestro Service:
+      import { Http, Response } from '@angular/http';
+      import { Observable } from 'rxjs/Observable';
+
+      constructor(private http: Http) { }
+
+2 - Sending a POST Request: almacenar elementos en el servidor.
+
+    2.1 - En nuestro Service:
+
+      storeServers(servers: any[]): Observable<Response> {
+        return this.http.post('https://angular4-course-ng-http.firebaseio.com/data.json',servers); // data.json es nomenclatura especifica de Firebase (nombre del nodo y formato)
+      }
+
+    2.2 - En nuestro Component:
+
+    onSave() {
+      this.serverService.storeServers(this.servers)
+        .subscribe(
+          (response) => console.log(response),
+          (error) => console.log(error)
+        );
+    }
+
+  3 - Adjusting Request Headers:
+
+    Si tenemos que enviar ciertas cabeceras especificas.
+
+    storeServers(servers: any[]): Observable<Response> {
+      const headers = new Headers({ 'Content-Type': 'application/json' })
+      return this.http.post('https://angular4-course-ng-http.firebaseio.com/data.json',
+        servers,
+        {headers: headers });
+    }
+
+  4 - Sending GET Request: recuperar elementos del servidor
+
+      4.1 - En nuestro Service:
+
+        getServers() {
+          return this.http.get('https://angular4-course-ng-http.firebaseio.com/data.json');
+        }
+
+      4.2 - En nuestro Component
+
+        onGet(){
+          this.serverService.getServers()
+            .subscribe(
+              (response: Response) =>{
+                const data = response.json();
+                console.log(data);
+              },
+              (error) => console.log(error)
+            );
+        }
+
+    5 - Sending a PUT Request: sobrescribir elementos en el servidor
+
+      storeServers(servers: any[]): Observable<Response> {
+        const headers = new Headers({ 'Content-Type': 'application/json' })
+        return this.http.put('https://angular4-course-ng-http.firebaseio.com/data.json',
+          servers,
+          {headers: headers });
+      }
+
+    6 - Transform Responses easily with Observable Operations:
+
+      6.1 - En nuestro Service:
+
+        Para centralizar la transformacion en nuestro servicio usaremos el operador Map, que retorna un nuevo Observable.
+
+        getServers() {
+          return this.http.get('https://angular4-course-ng-http.firebaseio.com/data.json')
+            .map(
+              (response: Response) => {
+                const data = response.json();
+                for (const server of data) {
+                    server.name = 'FETCHED_' + server.name;
+                }
+                return data;
+              }
+            );
+          }
+
+      6.2 - En nuestro Component (Queda más elegante y no duplicamos codigo)
+
+        onGet(){
+          this.serverService.getServers()
+            .subscribe(
+              (servers: any[])  => console.log(servers),
+              (error) => console.log(error)
+            );
+        }
+
+      7 - Error Handling:
+
+        Si necesitamos capturar y hacer alguna transformacion adicional sobre el error podemos hacer esto.
+
+          getServers() {
+            return this.http.get('https://angular4-course-ng-http.firebaseio.com/data')
+              .map(
+                (response: Response) => {
+                  const data = response.json();
+                  for (const server of data) {
+                      server.name = 'FETCHED_' + server.name;
+                  }
+                  return data;
+                }
+              )
+              .catch(
+                (error: Response) => {
+                  return Observable.throw('Something went wrong');
+                }
+              )
+          }
+
+        8 - Using the Async Pipe in Http Request:
+
+          8.1 - En el Service:
+              Devolvemos el Observable igual que en los ejemplos anteriores
+
+              getAppName() {
+                return this.http.get('https://angular4-course-ng-http.firebaseio.com/appName.json')
+                  .map(
+                    (response: Response) => {
+                      return response.json();
+                    }
+                  )
+              }
+
+            8.2 - En el Component
+
+              appName = this.serverService.getAppName();
+
+            8.3 - En el Template:
+
+                <h1>{{ appName | async }}</h1>
