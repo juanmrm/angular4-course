@@ -1,3 +1,10 @@
+    https://angular.io/guide/testing
+    https://semaphoreci.com/community/tutorials/testing-components-in-angular-2-with-jasmine
+    https://github.com/angular/angular-cli#running-unit-tests
+    https://github.com/angular/angular-cli#running-end-to-end-tests
+
+
+
 -------------------- Unit testing -------------------
 
     Paquete proporcionado por angular: '@angular/core/testing'
@@ -31,5 +38,3 @@
         ng test
 
 
-        npm uninstall --save-dev angular-cli
-        npm install --save-dev @angular/cli@latest
