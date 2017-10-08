@@ -1,0 +1,35 @@
+-------------------- Unit testing -------------------
+
+    Paquete proporcionado por angular: '@angular/core/testing'
+
+    El tipico Test Runner es Karma / Jasmine... (paquete que instalamos y ejecuta nuestros tests).
+
+    1 - Orden de Ejecucion: 
+
+        1.1 - Se ejecuta el beforeEach antes de cada bloque.
+            Aqui declararemos que necesitamos en declarations
+
+            beforeEach(() => {
+                TestBed.configureTestingModule({
+                declarations: [
+                    AppComponent
+                ],
+                });
+            });
+
+        2.1 - Se ejecuta cada bloque it:
+
+              it('should render title in a h1 tag', async(() => {
+                    let fixture = TestBed.createComponent(AppComponent);
+                    fixture.detectChanges();
+                    let compiled = fixture.debugElement.nativeElement;
+                    expect(compiled.querySelector('h1').textContent).toContain('app works!');
+                }));
+
+    2 - Ejecutar los test con el CLI
+
+        ng test
+
+
+        npm uninstall --save-dev angular-cli
+        npm install --save-dev @angular/cli@latest
