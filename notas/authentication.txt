@@ -1,0 +1,45 @@
+------------------------- JWT -----------------------------
+
+    https://jwt.io/
+    https://jwt.io/introduction/
+
+    1 - For using Firebase SDK in our project: npm install --save firebase
+
+    2 - Configure firebase in our project (config passed to firebase depends on our project, see in firebase console web)
+
+        https://console.firebase.google.com/
+        En nuestro proyecto, en Authentication -> Configuracion Web.
+
+        import { Component, OnInit } from '@angular/core';
+        import * as firebase from 'firebase';
+
+        @Component({
+            selector: 'app-root',
+            templateUrl: './app.component.html',
+            styleUrls: ['./app.component.css']
+        })
+        export class AppComponent implements OnInit {
+
+            ngOnInit() {
+                firebase.initializeApp({
+                apiKey: 'AIzaSyCnvu-FXntzar_20owRK6BFPCPvWFvzHcY',
+                authDomain: 'ng-recipe-book-46e95.firebaseapp.com',
+                });
+            }
+
+        }
+
+    3 - Make a service for manage Authentication:
+
+        import * as firebase from 'firebase';
+
+        export class AuthService {
+
+            signupUser(email: string, password: string) {
+                firebase.auth().createUserWithEmailAndPassword(email, password)
+                    .catch(
+                        error => console.log(error)
+                    );
+            }
+
+        }
