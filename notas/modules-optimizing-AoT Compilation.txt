@@ -84,22 +84,5 @@
 
     ------------------- Preloading Lazy Loaded Routes -----------------------
         En app-routing.module.ts: lo habilitamos
-            imports: [RouterModule.forRoot(appRoutes, { preloadingStrategy: PreloadAllModules })] //
-
-
-Errors when trying to build for production with AoT (ng build --prod --aot)
-
-ERROR in ng:///D:/Developer/docs_software/angularJS/angular4-course/recipes-book/src/app/recipes/recipe-edit/recipe-edit.component.html (59,9): Property 'contr
-ols' does not exist on type 'AbstractControl'.
-
-ERROR in ng:///D:/Developer/docs_software/angularJS/angular4-course/recipes-book/src/app/core/header/header.component.html (21,9): '$event' is declared but nev
-er used.
-
-https://github.com/angular/angular/issues/17131
-
-....
-
-
- *ngFor="let ingredientCtrl of recipeForm.get('ingredients').controls; let i = index"
-
- recipe-edit.component.html.
+            imports: [RouterModule.forRoot(appRoutes, { preloadingStrategy: PreloadAllModules })]
+                
