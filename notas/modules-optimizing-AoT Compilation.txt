@@ -1,0 +1,105 @@
+------------- Using Angular Modules & Optimizing Apps ---------------
+
+    * Feature Modules: la idea detras de los modulos es que agrupan cierta funcionalidad toda junta.
+    * Shared Module: son modulos que declaran componentes comunes. Resuelven el problema de no poder declarar un 
+        componente en 2 modulos distintos. Normalmente tendremos 1 unico shared module.
+
+        - declarations: indicamos qué componentes, directivas, pipes utiliza este modulo.
+            IMPORTANTE: no podemos declarar el mismo componente, directiva, pipe en 2 modulos distintos.
+        
+        - imports: que otros modulos necesitamos usar en nuestro modulo.
+
+        - providers: que servicios necesitamos usar en este modulo.
+
+        - bootstrap: cual es nuestro component root. Desde que componente arranca nuestra aplicacion.
+
+    --------------------- Working with Feature Modules -----------------
+
+        1 - Declarar un Feature Module
+
+            IMPORTANTE: importamos CommonModule que nos proporciona acceso a las directivas comunes (NgIf, Built in pipes etc...)
+                        En el app.module.ts no lo estamos importando porque ya importamos BrowserModule que lo incorpora.
+
+            @NgModule({
+                declarations: [
+                    RecipesComponent,
+                    RecipeStartComponent
+                    ....
+                ],
+                imports: [
+                    CommonModule,
+                    RecipesRoutingModule,
+                    ReactiveFormsModule
+                ]
+            })
+            export class RecipesModule {}
+
+        2 - Registrar rutas en un Feature Module
+
+            IMPORTANTE: solo el app.module.ts registra las rutas con RouterModule.forRoot(routes)
+
+            Los Feature Module lo hacen con RouterModule.forChild(routes)
+
+            p.e: Fijarse en el recipes-routing.module.ts
+
+        3 - Importarlo en el app.module.ts
+
+    --------------------- Working with Shared Modules -----------------------
+
+        1 - Declarar un Shared Module
+
+            @NgModule({
+                declarations: [
+                    DropdownDirective
+                ],
+                exports: [
+                    CommonModule, // Aprovechamos para exportar el CommonModule que lo usaremos en nuestros Feature Modules
+                    DropdownDirective
+                ]
+            })
+            export class SharedModule {}
+
+        2 - Importar el modulo en el Root Module (app.module.ts) y los Feature Modules.
+
+    -------------------- Adding Lazy Loading (optimizar rendimiento) ----------------------
+
+        Para no hacer una carga Eager:
+            
+            1 - Lo quitaremos de la seccion imports del app.module.ts, para que Webpack no lo incluya directamente.
+            2 - En nuestro routing ponemos la ruta y el modulo al que haremos referencia (se cargara bajo demanda):
+                 p.e: { path: 'recipes', loadChildren: './recipes/recipes.module#RecipesModule', }, 
+
+            3 - Proteger las rutas: 
+                p.e: { path: 'recipes', loadChildren: './recipes/recipes.module#RecipesModule', canLoad: [AuthGuard] } 
+
+                AuthGuard implementara la interfaz CanLoad.
+
+    ------------------- Creating a Core Module ------------------------------
+
+        p.e: ver el core.module.ts del projecto recipes-book.
+    
+    ------------------- Using AoT Compilation -------------------------------
+
+        ng build --prod --aot
+
+    ------------------- Preloading Lazy Loaded Routes -----------------------
+        En app-routing.module.ts: lo habilitamos
+            imports: [RouterModule.forRoot(appRoutes, { preloadingStrategy: PreloadAllModules })] //
+
+
+Errors when trying to build for production with AoT (ng build --prod --aot)
+
+ERROR in ng:///D:/Developer/docs_software/angularJS/angular4-course/recipes-book/src/app/recipes/recipe-edit/recipe-edit.component.html (59,9): Property 'contr
+ols' does not exist on type 'AbstractControl'.
+
+ERROR in ng:///D:/Developer/docs_software/angularJS/angular4-course/recipes-book/src/app/core/header/header.component.html (21,9): '$event' is declared but nev
+er used.
+
+https://github.com/angular/angular/issues/17131
+
+....
+
+
+ *ngFor="let ingredientCtrl of recipeForm.get('ingredients').controls; let i = index"
+
+ recipe-edit.component.html.
