@@ -1,0 +1,69 @@
+---------------------------- HttpClient ----------------------------
+
+    https://angular.io/guide/http
+
+    No hay ningun problema en usar el antiguo http client, no esta deprecado ni nada por el estilo.
+
+    1 - Unlocking:
+
+        import in app.module.ts the new HttpClientModule (import { HttpClientModule } from '@angular/common/http')
+
+    2 - Inject in our component:
+
+        private httpClient: HttpClient
+
+        NOTA: podemos indicar el tipo de objeto de las respuestas, indicando el tipo de objeto que esperamos recibir.
+              No necesitamos hacer response.json(), se asume por defecto que es json.
+
+         this.httpClient.get<Recipe[]>('https://ng-recipe-book-46e95.firebaseio.com/recipes.json?auth=' + token)
+            .map(
+                (recipes) => {
+                    // const recipes: Recipe[] = response.json();
+                    ....
+                }
+                return recipes;
+            })
+
+    3 - Request Configuration and Response (observe the response):
+
+        Sino queremos que se haga una transformacion automatica a Json, podemos pasar un objeto Options donde indicamos
+        que queremos observar de la respuesta (observe) y el tipo de respuesta (responseType)
+
+        p.e:     
+            this.httpClient.get('https://ng-recipe-book-46e95.firebaseio.com/recipes.json?auth=' + token, {
+                observe: 'response', // response, body...
+                responseType: 'text' // text, json, blob...
+            })
+            .map(
+                (recipes) => {
+                    console.log(recipes);
+                    // for (const recipe of recipes) {
+                    //   if (!recipe['ingredients']) {
+                    //     console.log(recipe);
+                    //     recipe['ingredients'] = [];
+                    //   }
+                    // }
+                    return [];
+                }
+             )
+
+        4 - Requesting events (observe events for request/response):
+
+            p.e:
+                storeRecipes() {
+                    const token = this.authService.getToken();
+                    return this.httpClient.put('https://ng-recipe-book-46e95.firebaseio.com/recipes.json?auth=' + token, 
+                    this.recipeService.getRecipes(), {
+                        observe: 'events'
+                    });
+                }
+
+
+                this.dataStorageService.storeRecipes() {
+                    .subscribe(
+                        (response: HttpEvent<Object>) => { // Estamos escuchando eventos Response, Sent, ....
+                            console.log(response.type === HttpEventType.Response); 
+                        }
+                    );
+                }
+
