@@ -10,7 +10,50 @@
         - Reducers: reduces / combine State
         - Store: inmutable state
 
+    1 - Instalar el paquete en el proyecto
 
+        npm install --save @ngrx/store
 
+    2 - Creating Actions:
+
+        Se trata de declarar los distintos tipos de acciones junto con su payload
+
+        p.e: ver shopping-list.actions.ts
+
+    3 - Empezar a implementar Reducers:
+
+        Se trata de identificar el tipo de accion que recibimos y generar un nuevo estado inmutable tras aplicar
+        la logica relacionada con la accion que hayamos identificado.
+
+        p.e: ver shopping-list.reducers.ts
+
+    4 - Registering the Application Store:
+
+        En el app.module.ts vamos a registrar los reducers en imports:
+            StoreModule.forRoot({shoppingList: shoppingListReducer})
+
+    5 - Selecting Data from State:
+
+        5.1 Inyectar en el constructor del componente el Store
+            private store: Store<fromShoppingList.AppState>>
+
+        5.2 Seleccionar la informacion: 
+            shoppingListState: Observable<{ingredients: Ingredient[]}>
+            this.shoppingListState = this.store.select('shoppingList');
+
+        5.3 En el template incluir async:
+            *ngFor="let ingredient of (shoppingListState | async).ingredients ; let i = index"
+
+        p.e: ver shopping-list.component.ts y shopping-list.component.html
+
+    6 - Dispatch Actions:
+
+        5.1 Inyectar en el constructor del componente:
+            private store: Store<fromShoppingList.AppState>>
+
+        5.2 Hacer la llamada al Dispatch pasandole una nueva Action:
+            import * as ShoppingListActions from '../store/shopping-list.actions';
+
+            this.store.dispatch(new ShoppingListActions.AddIngredient(newIngredient));
 
 

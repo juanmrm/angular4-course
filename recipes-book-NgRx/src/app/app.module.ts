@@ -1,3 +1,5 @@
+import { shoppingListReducer } from './shopping-list/store/shopping-list.reducers';
+import { StoreModule } from '@ngrx/store';
 import { FormsModule } from '@angular/forms';
 import { CoreModule } from './core/core.module';
 import { AuthModule } from './auth/auth.module';
@@ -22,7 +24,8 @@ import { HttpClientModule } from '@angular/common/http';
     SharedModule,
     ShoppingListModule,
     AuthModule,
-    CoreModule
+    CoreModule,
+    StoreModule.forRoot({shoppingList: shoppingListReducer})
   ],
   providers: [],
   bootstrap: [AppComponent]
