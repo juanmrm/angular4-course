@@ -67,3 +67,83 @@
                     );
                 }
 
+        5 - Setting Headers and Http Parameters:
+
+              storeRecipes() {
+                    const token = this.authService.getToken();
+                    // const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
+                    return this.httpClient.put('https://ng-recipe-book-46e95.firebaseio.com/recipes.json',
+                    this.recipeService.getRecipes(), {
+                        observe: 'body',
+                        params: new HttpParams().set('auth', token)
+                        // headers: headers
+                    });
+                }
+
+        6 - Reacting to progress request (muy util al hacer upload / download de ficheros):
+
+            Nos ponemos a escuchar eventos de progreso (reportProgress) y segun el type, loaded, total
+            podriamos llegar a presentar una barra de progreso dividiendo loaded / total.
+
+            p.e:
+
+              storeRecipes() {
+                const token = this.authService.getToken();
+                const req = new HttpRequest('PUT', 'https://ng-recipe-book-46e95.firebaseio.com/recipes.json',
+                this.recipeService.getRecipes(), { reportProgress: true, params: new HttpParams().set('auth', token) });
+
+                return this.httpClient.request(req);
+              }
+
+              onSaveData() {
+                this.dataStorageService.storeRecipes()
+                .subscribe(
+                    (response) => console.log(response),
+                    (error) => console.log(error)
+                );
+              }
+
+        7 - Interceptors:
+
+                Tipico caso de uso en el que en todas las request necesitamos realizar la misma operacion, como por ejemplo
+                enviar el token de autorizacion.
+
+                Por defecto las request son inmutables, asi que tendremos que clonar la request.
+
+                p.e: 
+
+                    // Este interceptor actua ANTES de enviar la peticion
+                    @Injectable()
+                    export class AuthInterceptor implements HttpInterceptor {
+
+                        constructor(private authService: AuthService) { }
+
+                        intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+                            console.log('Intercepted!', req);
+                            const copiedReq = req.clone({ params: req.params.set('auth', this.authService.getToken()) });
+                            return next.handle(copiedReq); // Let it continue
+                        }
+                    }
+
+                    // Este interceptor actuar DESPUES de enviar la peticion, en la respuesta
+                    // Aqui usamos el metodo do de rxjs, para no consumir la respuesta, pero si interceptamos y hacemos la operacion que nos interese.
+                    export class LoggingInterceptor implements HttpInterceptor {
+
+                        intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+                            return next.handle(req).do(
+                                event => {
+                                    console.log('Logging interceptor', event);
+                                }
+                            );
+                        }
+                    }
+
+                    Los importaremos en providers por ejemplo en app.module.ts o e core.module.es.
+                    El orden de ejecucion sera el que estemos indicando al darlos de alta.
+
+                          { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+                          { provide: HTTP_INTERCEPTORS, useClass: LoggingInterceptor, multi: true }
+        
+        
+
+
