@@ -56,4 +56,7 @@
 
             this.store.dispatch(new ShoppingListActions.AddIngredient(newIngredient));
 
+    7 - Creating a global AppState:
 
+            Se trata de agrupar en un unico objeto el acceso a todos los states definidos en distintas partes.
+            p.e: ver app.reducers.ts

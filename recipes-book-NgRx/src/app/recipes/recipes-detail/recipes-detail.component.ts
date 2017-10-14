@@ -3,7 +3,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 
 import * as ShoppingListActions from '../../shopping-list/store/shopping-list.actions';
-import * as fromShoppingList from '../../shopping-list/store/shopping-list.reducers';
+import * as fromApp from '../../store/app.reducers';
 import { Recipe } from '../recipe.model';
 import { RecipeService } from '../recipes.service';
 
@@ -20,7 +20,7 @@ export class RecipesDetailComponent implements OnInit {
   constructor(private recipeService: RecipeService,
               private router: Router,
               private route: ActivatedRoute,
-              private store: Store<fromShoppingList.AppState>) { }
+              private store: Store<fromApp.AppState>) { }
 
   ngOnInit() {
     // Esta solucion no valdria porque solo seria valida para la primera vez, pero si nuestro detalle puede cambiar
