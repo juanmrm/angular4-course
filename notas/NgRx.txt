@@ -1,0 +1,16 @@
+----------------------- NgRx --------------------------
+
+    Si queremos usar una aproximacion mas elaborada con estructuras inmutables para la gestion del estado, 
+    usando el patrón Redux...aqui entra en juego NgRx (es una implementacion de esta aproximacion Redux en Angular).
+
+    Sobretodo para aplicaciones que son muy grandes.
+
+    Patron Redux (muy popular en React Community): ver imagen redux.png
+        - Actions
+        - Reducers: reduces / combine State
+        - Store: inmutable state
+
+
+
+
+

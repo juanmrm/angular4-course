@@ -1,0 +1,36 @@
+<div class="row">
+  <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+    <form (ngSubmit)="onSignup(f)" #f="ngForm" > 
+      <div class="form-group">
+        <label for="email">Mail</label>
+        <input 
+          type="email"
+          id="email"
+          name="email" 
+          ngModel 
+          class="form-control"
+          required
+          #email="ngModel">
+          <span class="hel-block" *ngIf="!email.valid && email.touched">Email is required</span>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input 
+          type="password" 
+          id="password" 
+          name="password" 
+          ngModel 
+          minlength="6"
+          class="form-control"
+          #password="ngModel">
+          <span class="help-block" *ngIf="!password.valid && password.touched">Please enter a valid password (6 characters at least)</span>
+      </div>
+      <p *ngIf="!f.valid && f.touched">The Form is invalid !</p>
+      <button 
+        class="btn-primary" 
+        type="submit"
+        [disabled]="!f.valid">Sign Up
+      </button>
+    </form>
+  </div>
+</div>
