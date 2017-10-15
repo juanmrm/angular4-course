@@ -1,7 +1,11 @@
 ----------------------- NgRx --------------------------
 
-    https://github.com/ngrx
+    Si queremos usar una aproximacion mas elaborada con estructuras inmutables para la gestion del estado de la APP, 
+    usando el patrón Redux...aqui entra en juego NgRx (es una implementacion de esta aproximacion Redux en Angular).
 
+    Sobretodo para aplicaciones que empiezan a crecer.
+
+    https://github.com/ngrx
     http://reactivex.io/rxjs/
         - Operadores:
             map // Realiza una operacion sobre el Observable y devuelve otro Observable que envuelve al anterior
@@ -11,11 +15,6 @@
             fromPromise // Transforma una Promesa en un Observable
             do // Realiza una operacion sobre la fuente del Observable, pero retorna un Observable identico al origen, dejando continuar la cadena.
             ...
-
-    Si queremos usar una aproximacion mas elaborada con estructuras inmutables para la gestion del estado, 
-    usando el patrón Redux...aqui entra en juego NgRx (es una implementacion de esta aproximacion Redux en Angular).
-
-    Sobretodo para aplicaciones que son muy grandes.
 
     Patron Redux (muy popular en React Community): ver imagen redux.png
         - Actions
@@ -116,5 +115,5 @@
             ver recipes.module.ts: 
                 StoreModule.forFeature('recipes', recipeReducer)
                 EffectsModule.forFeature([RecipeEffects])
-                
+
             ver recipes.reducers.ts
