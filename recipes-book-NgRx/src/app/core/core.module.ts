@@ -8,7 +8,6 @@ import { HomeComponent } from './home/home.component';
 import { AppRoutingModule } from '../app-routing.module';
 import { RecipeService } from '../recipes/recipes.service';
 import { DataStorageService } from '../shared/data-storage.service';
-import { AuthService } from '../auth/auth.service';
 
 @NgModule({
     declarations: [
@@ -26,7 +25,6 @@ import { AuthService } from '../auth/auth.service';
     providers: [
         RecipeService,
         DataStorageService,
-        AuthService,
         { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: LoggingInterceptor, multi: true }
     ]

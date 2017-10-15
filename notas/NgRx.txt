@@ -1,5 +1,17 @@
 ----------------------- NgRx --------------------------
 
+    https://github.com/ngrx
+
+    http://reactivex.io/rxjs/
+        - Operadores:
+            map // Realiza una operacion sobre el Observable y devuelve otro Observable que envuelve al anterior
+            mergeMap // Se trata de crear Observables a partir de un array.
+            switchMap // Transforma un Observable en otro, resolviendo el primero.
+            take / /Se trata de atender al Observable solo las n primeras veces.
+            fromPromise // Transforma una Promesa en un Observable
+            do // Realiza una operacion sobre la fuente del Observable, pero retorna un Observable identico al origen, dejando continuar la cadena.
+            ...
+
     Si queremos usar una aproximacion mas elaborada con estructuras inmutables para la gestion del estado, 
     usando el patrón Redux...aqui entra en juego NgRx (es una implementacion de esta aproximacion Redux en Angular).
 
@@ -10,53 +22,88 @@
         - Reducers: reduces / combine State
         - Store: inmutable state
 
-    1 - Instalar el paquete en el proyecto
+    1 - Instalar los paquetes que necesitemos en el proyecto
 
-        npm install --save @ngrx/store
+        npm install --save @ngrx/store // Para trabajar con Stores
+            StoreModule.forRoot(reducers)
+
+        npm install --save @ngrx/effect // Para trabajar con Side Effects
+            EffectsModule.forRoot(effects)
+
+        npm install --save @ngrx/router-store // Para escuchar cambios de estado en el router
+            StoreRouterConnectingModule
+
+        npm install --save @ngrx/store-devtools // Herramienta para poder ver el estado de la aplicacion en runtime
+            Requiere una extensión de Chrome -> Redux DevTools
+            
+            !environment.production ? StoreDevtoolsModule.instrument() : [] // Solo lo añadiremos si no estamos en modo produccion
+
+        Ver la config en app.module.ts
 
     2 - Creating Actions:
 
-        Se trata de declarar los distintos tipos de acciones junto con su payload
+            Se trata de declarar los distintos tipos de acciones junto con su payload
 
-        p.e: ver shopping-list.actions.ts
+            p.e: ver shopping-list.actions.ts
 
     3 - Empezar a implementar Reducers:
 
-        Se trata de identificar el tipo de accion que recibimos y generar un nuevo estado inmutable tras aplicar
-        la logica relacionada con la accion que hayamos identificado.
+            Se trata de identificar el tipo de accion que recibimos y generar un nuevo estado inmutable tras aplicar
+            la logica relacionada con la accion que hayamos identificado.
 
-        p.e: ver shopping-list.reducers.ts
+            p.e: ver shopping-list.reducers.ts
 
     4 - Registering the Application Store:
 
-        En el app.module.ts vamos a registrar los reducers en imports:
-            StoreModule.forRoot({shoppingList: shoppingListReducer})
+            En el app.module.ts vamos a registrar los reducers en imports:
+                StoreModule.forRoot({shoppingList: shoppingListReducer})
 
     5 - Selecting Data from State:
 
-        5.1 Inyectar en el constructor del componente el Store
-            private store: Store<fromShoppingList.AppState>>
+            5.1 Inyectar en el constructor del componente el Store
+                private store: Store<fromShoppingList.AppState>>
 
-        5.2 Seleccionar la informacion: 
-            shoppingListState: Observable<{ingredients: Ingredient[]}>
-            this.shoppingListState = this.store.select('shoppingList');
+            5.2 Seleccionar la informacion: 
+                shoppingListState: Observable<{ingredients: Ingredient[]}>
+                this.shoppingListState = this.store.select('shoppingList');
 
-        5.3 En el template incluir async:
-            *ngFor="let ingredient of (shoppingListState | async).ingredients ; let i = index"
+            5.3 En el template incluir async:
+                *ngFor="let ingredient of (shoppingListState | async).ingredients ; let i = index"
 
-        p.e: ver shopping-list.component.ts y shopping-list.component.html
+            p.e: ver shopping-list.component.ts y shopping-list.component.html
 
     6 - Dispatch Actions:
 
-        5.1 Inyectar en el constructor del componente:
-            private store: Store<fromShoppingList.AppState>>
+            5.1 Inyectar en el constructor del componente:
+                private store: Store<fromShoppingList.AppState>>
 
-        5.2 Hacer la llamada al Dispatch pasandole una nueva Action:
-            import * as ShoppingListActions from '../store/shopping-list.actions';
+            5.2 Hacer la llamada al Dispatch pasandole una nueva Action:
+                import * as ShoppingListActions from '../store/shopping-list.actions';
 
-            this.store.dispatch(new ShoppingListActions.AddIngredient(newIngredient));
+                this.store.dispatch(new ShoppingListActions.AddIngredient(newIngredient));
 
-    7 - Creating a global AppState:
+    7 - Creating a global AppState and global const reducers:
 
             Se trata de agrupar en un unico objeto el acceso a todos los states definidos en distintas partes.
-            p.e: ver app.reducers.ts
+            Ademas exportaremos una constante con la configuracion de todos los reducers de la aplicacion
+            
+            p.e: ver app.reducers.ts y app.module.ts
+
+    8 - Only React to Actions Once via take(n):
+
+            Se trata de completar / atender al Observable solo las n primeras veces.
+
+            p.e: ver auth.interceptor.ts
+
+    9 - Manage Async Task in NgRx (Side Effects @Effect())
+
+        Se trata de tareas asincronas que estan relacionadas con determinados cambios de estado.
+        
+        Son tareas adicionales a un determinado cambio de estado, aqui no vamos a modificar el estado.
+        Son parecidos a los reducers, pero sin generar un nuevo estado directamente.
+
+        Ademas nos permiten realizar nuevos dispatch de acciones relacionadas con este cambio de estado en marcha.
+        Tambien podemos enrutar si es necesario etc...
+
+        p.e: ver auth.effects.ts
+
