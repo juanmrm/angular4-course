@@ -36,5 +36,5 @@
     2 - Ejecutar los test con el CLI
 
         ng test
-
+        ng test --sourcemaps=false // Will not fail Karma silently but give you some detail about the error instead.
 

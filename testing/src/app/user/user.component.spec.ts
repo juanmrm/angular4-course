@@ -4,62 +4,58 @@ import { async, ComponentFixture, ComponentFixtureAutoDetect, TestBed } from '@a
 
 import { UserComponent } from './user.component';
 
-class UserServiceSpy {
-  user: {
-    name: 'Max'
-  };
-}
-
-describe('UserComponent', () => {
-  let component: UserComponent;
-  let fixture: ComponentFixture<UserComponent>;
-
-
+// class UserServiceSpy {
+//   user: {
+//     name: 'Max'
+//   };
+// }
+describe('Component: User', () => {
   beforeEach(async(() => {
-
     // Use this service Stub if in the user component we don't have a UserService provider.
     // This way we will insert a suitable UserService mock
-
     // const userServiceStub = {
     //   isLoggedIn: true,
     //   user: { name: 'Test User'}
     // };
-
     TestBed.configureTestingModule({
-      declarations: [ UserComponent ],
-      providers: [
-        { provide: ComponentFixtureAutoDetect, useValue: true } // Activate Automatic Change Detection
-        // { provide: UserService, useValue: userServiceStub } // Make use of these mock service provider only if the
-                                                              //  user component doesn't provide a UserService
-      ]
-    })
-    .overrideComponent(UserComponent, {
-      set: {
-        providers: [
-          { provide: UserService, useClass: UserServiceSpy }
-        ]
-      }
-    })
-
-    .compileComponents();
+      declarations: [ UserComponent ]
+      // providers: [
+         // { provide: ComponentFixtureAutoDetect, useValue: true } // Activate Automatic Change Detection
+         // { provide: UserService, useValue: userServiceStub } // Make use of these mock service provider only if the
+                                                                //  user component doesn't provide a UserService
+      // ]
+    }).compileComponents();
   }));
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(UserComponent);
-    component = fixture.componentInstance;
-    // fixture.detectChanges();
-  });
-
   it('should create the app', () => {
+    const fixture = TestBed.createComponent(UserComponent);
+    const component = fixture.debugElement.componentInstance;
+    console.log(component.user);
     expect(component).toBeTruthy();
   });
 
   it('should use the user name from the service', () => {
-    // const userServiceSpy2 = TestBed.get(UserService);
-    const userServiceSpy = fixture.debugElement.injector.get(UserService);
-    // fixture.detectChanges();
-    console.log(userServiceSpy);
-    expect(userServiceSpy.user.name).toEqual(component.user.name);
+    const fixture = TestBed.createComponent(UserComponent);
+    const component = fixture.debugElement.componentInstance;
+    const userService = fixture.debugElement.injector.get(UserService);
+    fixture.detectChanges();
+    expect(userService.user.name).toEqual(component.user.name);
+  });
+
+  it('should display the user name if the user is logged in', () => {
+    const fixture = TestBed.createComponent(UserComponent);
+    const component = fixture.debugElement.componentInstance;
+    component.isLoggedIn = true;
+    fixture.detectChanges();
+    const compiled = fixture.debugElement.nativeElement;
+    expect (compiled.querySelector('p').textContent).toContain(component.user.name);
+  });
+
+  it('shouldn\'t display the user name if the user is logged in', () => {
+    const fixture = TestBed.createComponent(UserComponent);
+    const component = fixture.debugElement.componentInstance;
+    fixture.detectChanges();
+    const compiled = fixture.debugElement.nativeElement;
+    expect (compiled.querySelector('p').textContent).not.toContain(component.user.name);
   });
 
 });

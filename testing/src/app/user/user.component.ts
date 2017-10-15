@@ -9,7 +9,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserComponent implements OnInit {
 
-  user: { name: string };
+  user: {
+    name: string
+  };
   isLoggedIn = false;
 
   constructor(private userService: UserService) { }
