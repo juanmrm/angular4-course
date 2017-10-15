@@ -1,8 +1,12 @@
-import { Store } from '@ngrx/store';
-import { Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/take';
+
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { Router } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
+
 import * as fromApp from '../store/app.reducers';
 import * as fromAuth from './store/auth.reducers';
 

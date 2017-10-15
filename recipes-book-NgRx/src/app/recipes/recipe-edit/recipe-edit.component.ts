@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
-import { RecipeService } from '../recipes.service';
+import { Store } from '@ngrx/store';
+
+import * as RecipeActions from '../store/recipe.actions';
+import * as fromRecipe from '../store/recipe.reducers';
 
 @Component({
   selector: 'app-recipe-edit',
@@ -15,36 +18,30 @@ export class RecipeEditComponent implements OnInit {
   recipeForm: FormGroup;
 
   constructor(private route: ActivatedRoute,
-              private recipeService: RecipeService,
-              private router: Router ) {
+              private router: Router,
+              private store: Store<fromRecipe.FeatureState>) {
   }
 
   ngOnInit() {
     this.route.params
       .subscribe(
         (params: Params) => {
-         this.id = +params['id'];
-         this.editMode = params['id'] != null; // Si existe id en la url sera porque estamos en modo edicion, sino sera undefined.
-                                                // Si usaramos strict check !== null no funcionaria porque solo comprobamos si es distinto de null
-         this.initForm();
+          this.id = +params['id'];
+          // Si existe id en la url sera porque estamos en modo edicion, sino sera undefined.
+          // Si usaramos strict check !== null no funcionaria porque solo comprobamos si es distinto de null
+          this.editMode = params['id'] != null;
+          this.initForm();
         }
-      )
+      );
   }
 
   onSubmit() {
-    // const newRecipe = new Recipe(
-    //   this.recipeForm.value['name'],
-    //   this.recipeForm.value['description'],
-    //   this.recipeForm.value['imagePath'],
-    //   this.recipeForm.value['ingredients'],
-    // );
-
     if (this.editMode) {
-      this.recipeService.updateRecipe(this.id, this.recipeForm.value);
+      this.store.dispatch(new RecipeActions.UpdateRecipe({index: this.id, updatedRecipe: this.recipeForm.value}));
     } else {
-      this.recipeService.addRecipe(this.recipeForm.value);
+      this.store.dispatch(new RecipeActions.AddRecipe(this.recipeForm.value));
     }
-    this.router.navigate(['../'], { relativeTo: this.route });
+    this.onCancel();
   }
 
   onAddIngredient() {
@@ -78,23 +75,27 @@ export class RecipeEditComponent implements OnInit {
     const recipeIngredients = new FormArray([]);
 
     if (this.editMode) {
-      const recipe = this.recipeService.getRecipe(this.id);
-      recipeName = recipe.name;
-      recipeImagePath = recipe.imagePath;
-      recipeDescription = recipe.description;
-      if (recipe['ingredients']) { // Ver si tiene ingredientes definidos, si no es undefined
-        for (const ingredient of recipe.ingredients) {
-          recipeIngredients.push(
-            new FormGroup({
-              'name': new FormControl(ingredient.name, Validators.required),
-              'amount': new FormControl(ingredient.amount, [
-                Validators.required,
-                Validators.pattern(/^[1-9]+[0-9]*$/)
-              ])
-            })
-          );
-        }
-      }
+      this.store.select('recipes')
+        .take(1)
+        .subscribe((recipeState: fromRecipe.State) => {
+          const recipe = recipeState.recipes[this.id];
+          recipeName = recipe.name;
+          recipeImagePath = recipe.imagePath;
+          recipeDescription = recipe.description;
+          if (recipe['ingredients']) { // Ver si tiene ingredientes definidos, si no es undefined
+            for (const ingredient of recipe.ingredients) {
+              recipeIngredients.push(
+                new FormGroup({
+                  'name': new FormControl(ingredient.name, Validators.required),
+                  'amount': new FormControl(ingredient.amount, [
+                    Validators.required,
+                    Validators.pattern(/^[1-9]+[0-9]*$/)
+                  ])
+                })
+              );
+            }
+          }
+        });
     }
     this.recipeForm = new FormGroup({
       'name': new FormControl(recipeName, Validators.required),

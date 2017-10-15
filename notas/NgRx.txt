@@ -44,14 +44,14 @@
 
             Se trata de declarar los distintos tipos de acciones junto con su payload
 
-            p.e: ver shopping-list.actions.ts
+            p.e: ver shopping-list.actions.ts, auth.actions.ts, recipe.actions.ts
 
     3 - Empezar a implementar Reducers:
 
             Se trata de identificar el tipo de accion que recibimos y generar un nuevo estado inmutable tras aplicar
             la logica relacionada con la accion que hayamos identificado.
 
-            p.e: ver shopping-list.reducers.ts
+            p.e: ver shopping-list.reducers.ts, auth.reducers.ts, recipe.reducers.ts
 
     4 - Registering the Application Store:
 
@@ -107,3 +107,14 @@
 
         p.e: ver auth.effects.ts
 
+    10 - Lazy Load and Dynamic Injection (registering a state dinamically):
+
+        Se trata de poder inyectar en el estado global de la aplicacion, un estado de forma dinamica 
+        que se crea como resultado de una carga lazy.
+
+        p.e: 
+            ver recipes.module.ts: 
+                StoreModule.forFeature('recipes', recipeReducer)
+                EffectsModule.forFeature([RecipeEffects])
+                
+            ver recipes.reducers.ts

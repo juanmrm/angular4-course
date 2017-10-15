@@ -1,9 +1,15 @@
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/switchMap';
+
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Actions, Effect } from '@ngrx/effects';
-import * as AuthActions from './auth.actions';
 import * as firebase from 'firebase';
 import { fromPromise } from 'rxjs/observable/fromPromise';
-import { Router } from '@angular/router';
+
+import * as AuthActions from './auth.actions';
 
 @Injectable()
 export class AuthEffects {
