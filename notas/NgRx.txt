@@ -5,8 +5,10 @@
 
     Sobretodo para aplicaciones que empiezan a crecer.
 
-    https://github.com/ngrx
-    http://reactivex.io/rxjs/
+    Official Github Repo with Documentation: https://github.com/ngrx/platform
+    Angular & NgRx Tutorial: https://blog.nrwl.io/using-ngrx-4-to-manage-state-in-angular-applications-64e7a1f84b7b
+    NgRx Patterns & Techniques: https://blog.nrwl.io/ngrx-patterns-and-techniques-f46126e2b1e5
+    RxJs: http://reactivex.io/rxjs/
         - Operadores:
             map // Realiza una operacion sobre el Observable y devuelve otro Observable que envuelve al anterior
             mergeMap // Se trata de crear Observables a partir de un array.
