@@ -1,6 +1,7 @@
+import { DataService } from '../shared/data.service';
 
 import { UserService } from './user.service';
-import { async, ComponentFixture, ComponentFixtureAutoDetect, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, ComponentFixtureAutoDetect, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { UserComponent } from './user.component';
 
@@ -56,6 +57,39 @@ describe('Component: User', () => {
     const compiled = fixture.nativeElement;
     expect (compiled.querySelector('p').textContent).not.toContain(component.user.name);
   });
+
+  it('shouldn\'t fetch data successfully if not called asynchronously', () => {
+    const fixture = TestBed.createComponent(UserComponent);
+    const component = fixture.componentInstance;
+    const dataService = fixture.debugElement.injector.get(DataService);
+    const spy = spyOn(dataService, 'getDetails')
+      .and.returnValue(Promise.resolve('Data'));
+    fixture.detectChanges();
+    expect(component.data).toBe(undefined);
+  });
+
+  it('shouldn fetch data successfully if not called asynchronously', async(() => {
+    const fixture = TestBed.createComponent(UserComponent);
+    const component = fixture.componentInstance;
+    const dataService = fixture.debugElement.injector.get(DataService);
+    const spy = spyOn(dataService, 'getDetails')
+      .and.returnValue(Promise.resolve('Data'));
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      expect(component.data).toBe('Data');
+    });
+  }));
+
+  it('shouldn fetch data successfully if not called asynchronously', fakeAsync(() => {
+    const fixture = TestBed.createComponent(UserComponent);
+    const component = fixture.componentInstance;
+    const dataService = fixture.debugElement.injector.get(DataService);
+    const spy = spyOn(dataService, 'getDetails')
+      .and.returnValue(Promise.resolve('Data'));
+    fixture.detectChanges();
+    tick(); // In a fake asynchronously environment -> finish all asynchronous task immediately
+    expect(component.data).toBe('Data');
+  }));
 
 });
 

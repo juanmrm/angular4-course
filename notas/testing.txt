@@ -38,3 +38,52 @@
         ng test
         ng test --sourcemaps=false // Will not fail Karma silently but give you some detail about the error instead.
 
+    3 - Simulating Async Tasks
+
+        Hacer uso de async, spyOn, whenStable...
+
+        it('should fetch data successfully if not called asynchronously', async(() => {
+            const fixture = TestBed.createComponent(UserComponent);
+            const component = fixture.componentInstance;
+            const dataService = fixture.debugElement.injector.get(DataService);
+            const spy = spyOn(dataService, 'getDetails')
+            .and.returnValue(Promise.resolve('Data'));
+            fixture.detectChanges();
+            fixture.whenStable().then(() => {
+                expect(component.data).toBe('Data');
+            });
+        }));
+
+    4 - Use fakeAsync and tick
+
+        fakeAsync, tick
+
+        Podemos eliminar el whenStable y usar tick.
+
+          it('shouldn fetch data successfully if not called asynchronously', fakeAsync(() => {
+            const fixture = TestBed.createComponent(UserComponent);
+            const component = fixture.componentInstance;
+            const dataService = fixture.debugElement.injector.get(DataService);
+            const spy = spyOn(dataService, 'getDetails')
+            .and.returnValue(Promise.resolve('Data'));
+            fixture.detectChanges();
+            tick(); // In a fake asynchronously environment -> finish all asynchronous task immediately
+            expect(component.data).toBe('Data');
+        }));
+
+    5 - Isolated vs Non Isolated Test
+
+        Isolated: ver test reverse.pipe.spec.ts -> IMPOTANTE: aqui no necesitamos modulos / herrameintas complementarias del core de angular
+                                                              para testing, por eso este test está aislado completamente.
+
+            import { ReversePipe } from './reverse.pipe';
+                describe('Pipe: Reverse', () => {
+
+                it('should reverse the text', () => {
+                    const reversePipe = new ReversePipe();
+                    expect(reversePipe.transform('hello')).toEqual('olleh');
+                });
+
+            });
+
+
