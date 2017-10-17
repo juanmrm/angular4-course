@@ -1,0 +1,14 @@
+Implementing Server Side Rendering - No es necesario, es opcional, pero puede ser interesante.
+
+Angular 4 (formerly Angular 2) The Complete Guide
+
+Bonus: Angular Universal.
+
+https://github.com/angular/angular-cli/wiki -> stories
+
+https://github.com/angular/angular-cli/wiki/stories-universal-rendering
+
+  IMPORTANTE: asegurarse primero de que nuestra aplicación no manipula el DOM directamente, en directivas o similar,
+    sino no va a funcionar (Query selector, jquery...)
+
+    Si tenemos que acceder al DOM lo haremos con @HostBinding, HostListening o con el Angular Renderer

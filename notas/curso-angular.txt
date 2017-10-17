@@ -17,6 +17,8 @@ Instalar la ultima version de Node JS (en el momento del curso, NPM es el gestor
 Instalacion del cliente de angular:
 	sudo npm install -g @angular/cli
 
+	https://github.com/angular/angular-cli/wiki
+
 Creacion de un proyecto:
 	ng new my-first-app
 
