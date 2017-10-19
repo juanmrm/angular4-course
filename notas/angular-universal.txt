@@ -11,4 +11,32 @@ https://github.com/angular/angular-cli/wiki/stories-universal-rendering
   IMPORTANTE: asegurarse primero de que nuestra aplicación no manipula el DOM directamente, en directivas o similar,
     sino no va a funcionar (Query selector, jquery...)
 
-    Si tenemos que acceder al DOM lo haremos con @HostBinding, HostListening o con el Angular Renderer
+    Si tenemos que acceder al DOM lo haremos con @HostBinding, @HostListening o con el Angular Renderer
+
+  1 - Instalar el paquete:
+
+    npm install --save @angular/platform-server@latest
+    
+  2 - Añadir al app.module.ts. BrowserModule.withServerTransition...
+
+  3 - Crear un app.server.module.ts -> ver app.server.module.ts
+
+  4 - Definir un src/main.server.ts
+
+  5 - Definir un src/tsconfig.server.json
+
+  6 - Configurar el angular-cli.json añadiendo una nueva app. (OJO!!!!: comentarios (// /**/) en este fichero rompen la compilacion porque es un JSON)
+
+  7 - Compilar parte cliente y parte servidor
+
+    # This builds the client application in dist/browser/
+      ng build --prod
+
+    # This builds the server bundle in dist/server/
+      ng build --prod --app 1 --output
+
+    NOTA: resulta interesante tener una tarea de npm que nos construya parte cliente y tb servidor:
+      "build:client-and-server-bundles": "ng build --prod && ng build --prod --app 1 --output-hashing=false"
+
+
+

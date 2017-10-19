@@ -23,7 +23,10 @@ import { reducers } from './store/app.reducers';
     AppComponent
   ],
   imports: [ // This are loading Eagerly
-    BrowserModule,
+    // Add .withServerTransition() to support Universal rendering.
+    // The application ID can be any identifier which is unique on
+    // the page.
+    BrowserModule.withServerTransition({appId: 'my-universal-app'}),
     // HttpModule,
     HttpClientModule,
     FormsModule,

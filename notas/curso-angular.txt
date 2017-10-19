@@ -36,11 +36,14 @@ Configurar en el .angular-cli.json
 
 Por debajo CLI utiliza Webpack, una herramienta que empaqueta todos los JS y CSS y los añade al index.html
 
-
 INSTALAR SASS EN NODE
 
-npm install node-sass sass-loader raw-loader --save-dev
+	npm install node-sass sass-loader raw-loader --save-dev
 
 CREAR UN PROYECTO CON SASS
 
-ng new NombreProyecto --style=scss
+	ng new NombreProyecto --style=scss
+
+ACTUALIZAR VERSION ANGULAR:
+
+	npm install @angular/{animations,common,compiler,core,forms,http,platform-browser,platform-browser-dynamic,router,compiler-cli,language-service}@latest --save
