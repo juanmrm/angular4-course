@@ -1,0 +1,37 @@
+Usando animaciones
+
+  1 - Instalar el paquete de animaciones
+
+    npm install --save @angular/animations
+
+  2 - Configurar el app.module.ts
+
+    import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+    En imports[] array añadimos BrowserAnimationsModule
+
+  3 - En el component en el decorator de @Component usaremos la propiedad animations
+
+    Ver app.component.ts.
+
+      trigger: para indicar nuestro binding con el template (en el template usaremos [@triggerName]="expression")
+      state: para definir los estados
+      transition: para definir las transiciones entre estados (one way => or two ways <=>, * para indicar any state)
+
+  4 - Void state (lo proporciona Angular)
+
+      El elemento no se ha añadido todavia al DOM (estado inicial) o el elemento se ha sacado del DOM (estado final)
+
+  5 - Keyframes 
+
+      Mucho mas control durante las transiciones (keyframes)
+
+  6 - Agrupar transiciones de forma sincrona para que ocurran a la vez (aunque tarden distinto tiempo en completarse)
+
+      group([animate1, animate2...])
+
+  7 - Using animations callbacks
+
+      En el template 
+        (@triggerName.start)="animationStarted($event)"
+        (@triggerName.done)="animationEnded($event)">
