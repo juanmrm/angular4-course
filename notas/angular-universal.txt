@@ -1,5 +1,8 @@
 Implementing Server Side Rendering - No es necesario, es opcional, pero puede ser interesante.
 
+  Necesitamos un servidor que sea capaz de ejecutar node.js, javascript en la parte servidora, no nos vale un 
+  servidor que solo proporcione estaticos (html, css...).
+
 Angular 4 (formerly Angular 2) The Complete Guide
 
 Bonus: Angular Universal.
@@ -38,5 +41,14 @@ https://github.com/angular/angular-cli/wiki/stories-universal-rendering
     NOTA: resulta interesante tener una tarea de npm que nos construya parte cliente y tb servidor:
       "build:client-and-server-bundles": "ng build --prod && ng build --prod --app 1 --output-hashing=false"
 
+  8 - Configurar un Express Server:
+
+      8.1 Instalar:
+        npm install --save express
+        npm install --save @nguniversal/express-engine
+        npm install --save @nguniversal/module-map-ngfactory-loader
+
+      8.2 Configurar server.js
+        Para distribuir (desplegar) la aplicación, necesitaremos el package.json, server.js y la carpeta dist (cliente y servidor)
 
 
