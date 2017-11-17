@@ -14,7 +14,7 @@
     1 - Orden de Ejecucion: 
 
         1.1 - Se ejecuta el beforeEach antes de cada bloque.
-            Aqui declararemos que necesitamos en declarations
+            Aqui declararemos lo que necesitamos
 
             beforeEach(() => {
                 TestBed.configureTestingModule({
